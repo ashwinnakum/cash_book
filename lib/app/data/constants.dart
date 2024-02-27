@@ -1,3 +1,6 @@
+import 'package:cash_book/app/data/all.dart';
+
+RxBool isFirst = true.obs;
 class Constants {
   static const String apiKey = '2b223e5cee713615ha54ac203b24e9a123703mk411';
   static const emailRegX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';

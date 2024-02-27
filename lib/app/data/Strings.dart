@@ -45,4 +45,12 @@ class Strings {
   static const viewReports = "VIEW REPORTS";
   static const searchCustomer = "Search Customer";
   static const addNewBook = "ADD NEW BOOK";
+
+  static const addYourFirstEntry = "Add your first entry";
+  static const entryByYou = "Entry by You";
+  static const record = "Record ";
+  static const income = "Income";
+  static const expense = "Expense";
+  static const cashIn = "+ CASH IN";
+  static const cashOut = "+ CASH OUT";
 }

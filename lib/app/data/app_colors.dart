@@ -38,4 +38,5 @@ class AppColors {
   static const Color mapBoxColor = Color(0xFFF5F5EA);
   static const Color mapIconBackColor = Color(0xFF186091);
   static const Color currentMarkerBackColor = Color(0xFFECC269);
+  static const Color entryTextColor = Color(0xFFAB4D82);
 }

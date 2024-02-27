@@ -4,11 +4,13 @@ class CommonScreen extends StatelessWidget {
   Widget? child;
   Widget floatingActionButton;
   Widget? bottomNavigationBarWidget;
+  Color? backgroundColor;
 
   CommonScreen({
     super.key,
     this.bottomNavigationBarWidget,
     this.child,
+    this.backgroundColor,
     this.floatingActionButton = const SizedBox(),
   });
 
@@ -25,7 +27,7 @@ class CommonScreen extends StatelessWidget {
         child: Scaffold(
           floatingActionButton: floatingActionButton,
           bottomNavigationBar: bottomNavigationBarWidget ?? const SizedBox(),
-          backgroundColor: AppColors.primary,
+          backgroundColor: backgroundColor ?? AppColors.primary,
           resizeToAvoidBottomInset: false,
           body: child,
         ),
