@@ -10,6 +10,7 @@ class CommonModel {
   Color? color;
   Widget? widget;
   List<CommonModel>? list;
+  GestureTapCallback? onTap;
 
   CommonModel({
     this.name,
@@ -21,5 +22,6 @@ class CommonModel {
     this.widget,
     this.price,
     this.list,
+    this.onTap,
   });
 }

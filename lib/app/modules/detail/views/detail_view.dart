@@ -302,6 +302,63 @@ class DetailView extends GetView<DetailController> {
                           ],
                         ),
                       ),
+                      10.verticalSpace,
+                      SizedBox(
+                        height: 30.h,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          itemCount: controller.filterList.length,
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.only(left: 20.h,right: 20.h),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            CommonModel model = controller.filterList[index];
+                            return GestureDetector(
+                              onTap: () {
+                                controller.isSelected.value = (-1);
+                                if(index == 0)
+                                  {
+                                    controller.isCustom.value  = false;
+                                    controller.selectDateSheet();
+                                    controller.update();
+                                  }
+                                else
+                                  {
+                                    controller.entryTypeSheet();
+                                  }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 8.h),
+                                padding: EdgeInsets.symmetric(horizontal: 5.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  border: Border.all(color: AppColors.greyText),
+                                ),
+                                child: Row(
+                                  children: [
+                                    model.isCheck!.value ? Icon(Icons.calendar_month,size: 15.h,) : 0.verticalSpace,
+                                    4.horizontalSpace,
+                                    AppText(
+                                      index == 0
+                                          ? controller.isSelected.value != (-1)
+                                      ? controller.selectDateFilter[controller.isSelected.value]
+                                      : model.name ?? ""
+                                          :controller.isSelected2.value != (-1)
+                                          ? controller.entryTypeFilter[controller.isSelected2.value]
+                                      : model.name ?? "",
+                                      fontSize: FontSize.s14,
+                                      color: AppColors.darkText,
+                                      fontFamily: FontFamily.regular,
+                                    ),
+                                    4.horizontalSpace,
+                                    Icon(Icons.arrow_drop_down),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                       12.verticalSpace,
                       Row(
                         children: [
