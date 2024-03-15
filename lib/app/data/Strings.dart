@@ -44,7 +44,6 @@ class Strings {
 
   static const viewReports = "VIEW REPORTS";
   static const searchCustomer = "Search Customer";
-  static const addNewBook = "ADD NEW BOOK";
 
   static const addYourFirstEntry = "Add your first entry";
   static const entryByYou = "Entry by You";
@@ -53,4 +52,17 @@ class Strings {
   static const expense = "Expense";
   static const cashIn = "+ CASH IN";
   static const cashOut = "+ CASH OUT";
+  static const addCashInEntry = "Add Cash In Entry";
+  static const addCashOutEntry = "Add Cash Out Entry";
+  static const editCashInEntry = "Edit Cash In Entry";
+  static const generateReport = "Generate Report";
+
+  static const amount = "Amount";
+  static const addNewBook = "Add New Book";
+  static const enterBookName = "Enter Book Name";
+
+  static const suggestion = "Suggestions";
+  static const salaryBook = "Salary Book";
+  static const projectBook = "Project Book";
+  static const clientRecord = "Client Record";
 }

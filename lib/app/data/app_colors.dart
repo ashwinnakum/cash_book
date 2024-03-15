@@ -10,6 +10,8 @@ class AppColors {
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color appBackgroundColor = Color(0xFFFBFBFD);
 
+  static const Color greBackgroundColor = Color(0xFFF5F5F5);
+
   static const Color primary = Color(0xFF0752ad);
 
   static const Color splashGrey = Color(0xFFB4B4B4);

@@ -11,14 +11,15 @@ class CommonBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(borderRadius ?? 24.r),
-          topLeft: Radius.circular(borderRadius ?? 24.r),
+          topRight: Radius.circular(borderRadius ?? 12.r),
+          topLeft: Radius.circular(borderRadius ?? 12.r),
         ),
       ),
-      child: Padding(padding: padding ?? EdgeInsets.symmetric(horizontal: FontSize.defaultBackPadding, vertical: 24.h), child: widget),
+      child: Padding(padding: padding ?? EdgeInsets.symmetric(horizontal: 0, vertical: 20.h), child: widget),
     );
   }
 }

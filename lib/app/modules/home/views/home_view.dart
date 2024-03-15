@@ -1,3 +1,5 @@
+import 'package:sticky_headers/sticky_headers/widget.dart';
+
 import '../../../data/all.dart';
 import '../controllers/home_controller.dart';
 
@@ -9,11 +11,13 @@ class HomeView extends GetView<HomeController> {
     return CommonScreen(
       floatingActionButton: Obx(() {
         return FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () async {
+            controller.addBookSheet();
+          },
           isExtended: controller.isScroll.value,
           extendedPadding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 22.h),
           shape: !controller.isScroll.value ? const CircleBorder() : RoundedRectangleBorder(borderRadius: BorderRadius.circular(60.r)),
-          label: AppText(Strings.addNewBook, color: AppColors.whiteColor, fontSize: 15.sp),
+          label: AppText(Strings.addNewBook.toUpperCase(), color: AppColors.whiteColor, fontSize: 15.sp),
           backgroundColor: AppColors.primary,
           icon: const Icon(Icons.add, color: AppColors.whiteColor),
         );
@@ -41,13 +45,7 @@ class HomeView extends GetView<HomeController> {
                   fontFamily: FontFamily.semiBold,
                 ),
                 const Spacer(),
-                SizedBox(
-                  height: 30.h,
-                  width: 30.h,
-                  child: CommonImage(
-                    imageName: ImagePath.imagesIcBusiness,
-                  ),
-                ),
+                SizedBox(height: 30.h, width: 30.h, child: Image.asset(ImagePath.imagesIcRedPdf)),
               ],
             ),
           ),
@@ -201,113 +199,132 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: FontSize.defaultPadding),
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CommonTextField(
-                            controller: controller.search,
-                            hintText: Strings.searchCustomer,
-                            prefixIconData: Icons.search_rounded,
-                          ),
-                        ),
-                        15.horizontalSpace,
-                        Column(
+                  StickyHeader(
+                      overlapHeaders: false,
+                      header: Container(
+                        color: Colors.white,
+                        child: Column(
                           children: [
-                            Image.asset(
-                              ImagePath.imagesIcFilter,
-                              height: 25.h,
-                              width: 25.h,
-                              color: AppColors.primary,
-                            ),
-                            2.verticalSpace,
-                            AppText(
-                              'Filter',
-                              fontSize: 10.sp,
-                              color: AppColors.primary,
-                            )
-                          ],
-                        ),
-                        5.horizontalSpace
-                      ],
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 20,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.only(top: 20.h, left: FontSize.defaultPadding, right: FontSize.defaultPadding),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.DETAIL);
-                        },
-                        child: Container(
-                          color: AppColors.transparentColor,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 46.h,
-                                    width: 46.h,
-                                    padding: EdgeInsets.all(13.h),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary.withOpacity(0.05)),
-                                    child: Image.asset(
-                                      ImagePath.imagesMyBook,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  12.horizontalSpace,
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AppText(
-                                        'My Book',
-                                        color: AppColors.blackColor,
-                                        fontSize: 16.sp,
-                                        fontFamily: FontFamily.medium,
-                                      ),
-                                      6.verticalSpace,
-                                      AppText(
-                                        'Updated on Feb 13 2024',
-                                        color: AppColors.greyText,
-                                        fontSize: 12.5.sp,
-                                        fontFamily: FontFamily.regular,
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  AppText(
-                                    '-1,000',
-                                    color: AppColors.appRedColor,
-                                    fontSize: 14.sp,
-                                    fontFamily: FontFamily.medium,
-                                  ),
-                                  5.horizontalSpace,
-                                  controller.childPopup()
-                                  /*GestureDetector(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.more_vert_outlined,
-                                      color: AppColors.greyText.withOpacity(0.8),
-                                    ),
-                                  )*/
+                            10.verticalSpace,
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.transparentColor,
+                                borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                                boxShadow: const [
+                                  BoxShadow(color: Color(0x66B1BACD), blurRadius: 60, offset: Offset(0, 20), spreadRadius: -10),
                                 ],
                               ),
-                              Container(
-                                margin: EdgeInsets.only(left: 46.h, top: 15.h, bottom: 15.h),
-                                height: 0.8.h,
-                                color: AppColors.greyText.withOpacity(0.2),
-                              )
-                            ],
-                          ),
+                              margin: EdgeInsets.only(left: FontSize.defaultPadding, right: FontSize.defaultPadding),
+                              width: double.infinity,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: CommonTextField(
+                                      controller: controller.search,
+                                      hintText: Strings.searchCustomer,
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.all(13.h),
+                                        child: Image.asset(
+                                          ImagePath.imagesIcDarkSearch,
+                                          height: 16.h,
+                                          width: 16.h,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  15.horizontalSpace,
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        ImagePath.imagesIcFilter,
+                                        height: 25.h,
+                                        width: 25.h,
+                                        color: AppColors.primary,
+                                      ),
+                                      2.verticalSpace,
+                                      AppText(
+                                        'Filter',
+                                        fontSize: 10.sp,
+                                        color: AppColors.primary,
+                                      )
+                                    ],
+                                  ),
+                                  5.horizontalSpace
+                                ],
+                              ),
+                            ),
+                            10.verticalSpace,
+                          ],
                         ),
-                      );
-                    },
-                  )
+                      ),
+                      content: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 20,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.only(top: 10.h, left: FontSize.defaultPadding, right: FontSize.defaultPadding),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.DETAIL);
+                            },
+                            child: Container(
+                              color: AppColors.transparentColor,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 46.h,
+                                        width: 46.h,
+                                        padding: EdgeInsets.all(13.h),
+                                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary.withOpacity(0.05)),
+                                        child: Image.asset(
+                                          ImagePath.imagesMyBook,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                      12.horizontalSpace,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          AppText(
+                                            'My Book',
+                                            color: AppColors.blackColor,
+                                            fontSize: 16.sp,
+                                            fontFamily: FontFamily.medium,
+                                          ),
+                                          6.verticalSpace,
+                                          AppText(
+                                            'Updated on Feb 13 2024',
+                                            color: AppColors.greyText,
+                                            fontSize: 12.5.sp,
+                                            fontFamily: FontFamily.regular,
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      AppText(
+                                        '-1,000',
+                                        color: AppColors.appRedColor,
+                                        fontSize: 14.sp,
+                                        fontFamily: FontFamily.medium,
+                                      ),
+                                      5.horizontalSpace,
+                                      controller.childPopup()
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 46.h, top: 15.h, bottom: 15.h),
+                                    height: 0.8.h,
+                                    color: AppColors.greyText.withOpacity(0.2),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      )),
                 ],
               ),
             ),

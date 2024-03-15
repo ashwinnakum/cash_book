@@ -1,6 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/all.dart';
@@ -15,45 +12,48 @@ class DetailController extends GetxController {
     CommonModel(name: "24 February 2024", list: [
       CommonModel(
         name: "Hair cut",
-        price: "300",
-        id: "-3000",
+        price: "3,000",
+        id: "-2,000",
         icon: "at 5:04 pm",
       ),
       CommonModel(
         name: "Hair cut",
-        price: "300",
-        id: "-3000",
+        price: "2,000",
+        id: "-30,000",
         icon: "at 5:04 pm",
       ),
     ]),
     CommonModel(name: "23 February 2024", list: [
       CommonModel(
         name: "Hair cut",
-        price: "300",
-        id: "-3000",
+        price: "2,000",
+        id: "-30,000",
         icon: "at 5:04 pm",
       ),
       CommonModel(
         name: "Hair cut",
-        price: "300",
-        id: "-3000",
+        price: "2,000",
+        id: "-30,000",
         icon: "at 5:04 pm",
       ),
     ]),
-    CommonModel(name: "22 February 2024", list: [
-      CommonModel(
-        name: "Hair cut",
-        price: "300",
-        id: "-3000",
-        icon: "at 5:04 pm",
-      ),
-      CommonModel(
-        name: "Hair cut",
-        price: "300",
-        id: "-3000",
-        icon: "at 5:04 pm",
-      ),
-    ]),
+    CommonModel(
+      name: "22 February 2024",
+      list: [
+        CommonModel(
+          name: "Hair cut",
+          price: "5,000",
+          id: "-65,000",
+          icon: "at 5:04 pm",
+        ),
+        CommonModel(
+          name: "Hair cut",
+          price: "7,000",
+          id: "-89,000",
+          icon: "at 5:04 pm",
+        ),
+      ],
+    ),
   ];
 
   List<CommonModel> filterList = [
@@ -157,9 +157,9 @@ class DetailController extends GetxController {
                             AppText(
                               isCustom.value
                                   ? index == 3
-                                  ? "${DateFormat("dd, MMM, yyy").format(selectedStartDate)} - ${DateFormat("dd, MMM, yyy").format(selectedEndDate)}"
-                                  :selectDateFilter[index]
-                                  :selectDateFilter[index],
+                                      ? "${DateFormat("dd, MMM, yyy").format(selectedStartDate)} - ${DateFormat("dd, MMM, yyy").format(selectedEndDate)}"
+                                      : selectDateFilter[index]
+                                  : selectDateFilter[index],
                               color: AppColors.darkText,
                               fontSize: FontSize.s16,
                               fontFamily: FontFamily.semiBold,
@@ -199,7 +199,7 @@ class DetailController extends GetxController {
                                 "CLEAR ALL",
                                 color: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                                 fontFamily: FontFamily.medium,
-                                fontSize: FontSize.s16,
+                                fontSize: FontSize.s14,
                               ),
                             ],
                           ),
@@ -213,6 +213,7 @@ class DetailController extends GetxController {
                           update();
                         },
                         text: "APPLY",
+                        padding: EdgeInsets.symmetric(vertical: 17.h),
                         color: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                         textColor: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.8) : AppColors.whiteColor,
                       ),
@@ -220,6 +221,7 @@ class DetailController extends GetxController {
                     20.horizontalSpace,
                   ],
                 ),
+                (MediaQuery.of(Get.context!).padding.bottom + 5).verticalSpace
               ],
             ),
           );
@@ -340,7 +342,7 @@ class DetailController extends GetxController {
                                 "CLEAR ALL",
                                 color: isSelected2.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                                 fontFamily: FontFamily.medium,
-                                fontSize: FontSize.s16,
+                                fontSize: FontSize.s14,
                               ),
                             ],
                           ),
@@ -354,6 +356,7 @@ class DetailController extends GetxController {
                           update();
                         },
                         text: "APPLY",
+                        padding: EdgeInsets.symmetric(vertical: 17.h),
                         color: isSelected2.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                         textColor: isSelected2.value < 0 ? AppColors.greyColor.withOpacity(0.8) : AppColors.whiteColor,
                       ),
@@ -477,11 +480,13 @@ class DetailController extends GetxController {
                     ),
                   ),
                   20.verticalSpace,
-                  CommonButton(onTap: () {
-                    isCustom.value = true;
-                    update();
-                    Get.back();
-                  }, text: "DONE"),
+                  CommonButton(
+                      onTap: () {
+                        isCustom.value = true;
+                        update();
+                        Get.back();
+                      },
+                      text: "DONE"),
                   20.verticalSpace,
                 ],
               ),
@@ -496,12 +501,8 @@ class DetailController extends GetxController {
   DateTime selectedEndDate = DateTime.now();
 
   Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedStartDate,
-        firstDate: DateTime(2000, 8),
-        lastDate: DateTime.now()
-    );
+    final DateTime? picked =
+        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime.now());
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
@@ -510,16 +511,17 @@ class DetailController extends GetxController {
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedEndDate,
-        firstDate: selectedStartDate,
-        lastDate: DateTime.now()
-    );
+    final DateTime? picked =
+        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime.now());
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;
       update();
     }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
   }
 }

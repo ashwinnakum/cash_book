@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.fadeIn,
         title: Strings.appName,
         builder: EasyLoading.init(),
         initialRoute: AppPages.INITIAL,

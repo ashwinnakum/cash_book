@@ -10,7 +10,7 @@ class CommonTextField extends StatefulWidget {
   final String? labelText;
   final int? maxLines;
   final bool hasError;
-  final IconData? prefixIconData;
+  final Widget? prefixIcon;
   final IconData? passwordHideIcon;
   final IconData? passwordShowIcon;
   final TextInputAction? textInputAction;
@@ -27,7 +27,7 @@ class CommonTextField extends StatefulWidget {
     this.helperText,
     this.labelText,
     this.hasError = false,
-    this.prefixIconData,
+    this.prefixIcon,
     this.passwordHideIcon,
     this.passwordShowIcon,
     this.textInputAction,
@@ -63,7 +63,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         labelStyle: TextStyle(color: widget.accentColor ?? Colors.black),
         // Set accent color
         helperText: widget.helperText,
-        prefixIcon: widget.prefixIconData != null ? Icon(widget.prefixIconData, color: widget.accentColor ?? AppColors.primary) : null,
+        prefixIcon: widget.prefixIcon,
         suffixIcon: widget.obscureText
             ? IconButton(
                 onPressed: () {
@@ -96,8 +96,6 @@ class _CommonTextFieldState extends State<CommonTextField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
-        // You can add more customization to the decoration as needed
-        // For example, adding icons, labels, etc.
       ),
     );
   }
