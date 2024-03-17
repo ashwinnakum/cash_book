@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 class GenerateReportController extends GetxController {
   var select;
   List<CommonModel> reportList = [
-    CommonModel(name: Strings.allEntriesRepost, id: Strings.listOffAllEntries),
-    CommonModel(name: Strings.todayReport, id: Strings.todayInOutBalance),
-    CommonModel(name: Strings.lastMonth, id: Strings.lastMonthInOutBalance),
-    CommonModel(name: Strings.lastYear, id: Strings.lastYearInOutBalance),
-    CommonModel(name: Strings.customDate, id: Strings.customInOutBalance),
+    CommonModel(name: Strings.allEntriesRepost, type: Strings.listOffAllEntries),
+    CommonModel(name: Strings.todayReport, type: Strings.todayInOutBalance),
+    CommonModel(name: Strings.lastMonth, type: Strings.lastMonthInOutBalance),
+    CommonModel(name: Strings.lastYear, type: Strings.lastYearInOutBalance),
+    CommonModel(name: Strings.customDate, type: Strings.customInOutBalance),
   ];
 
   DateTime selectedStartDate = DateTime.now();

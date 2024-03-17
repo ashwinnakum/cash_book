@@ -1,6 +1,5 @@
-import 'package:cash_book/app/data/all.dart';
-
-RxBool isFirst = true.obs;
+/*
+RxBool isFirst = true.obs;*/
 
 class Constants {
   static const String apiKey = 'jExwb7PralnoOTGSd42SDFSgO0xczgrGedQvpLwo4W';
@@ -24,5 +23,6 @@ class Constants {
   static const String getBooks = 'getBooks';
   static const String getBookDetails = 'getBookDetails';
   static const String addCashEntry = 'addCashEntry';
+  static const String updateCashEntry = 'updateCashEntry';
   static const String deleteCashEntry = 'deleteCashEntry';
 }

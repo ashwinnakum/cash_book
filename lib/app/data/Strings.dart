@@ -44,9 +44,12 @@ class Strings {
 
   static const account = "Account";
   static const withScreen = "withScreen";
+
   static const edit = "Edit";
   static const add = "Add";
   static const isPlus = "isPlus";
+  static const inKey = "in";
+  static const outKey = "out";
 
   static const netBalance = "Net Balance";
   static const totalIn = "Total In (+)";
@@ -112,4 +115,13 @@ class Strings {
 
   static const createdOn = "Created on ";
   static const updatedOn = "Updated on ";
+  static const bookNameUpdatedSuccessfully = "Book name updated successfully";
+
+  static const delete = "Delete";
+  static const cancel = "Cancel";
+  static const deleteBook = "Delete Book";
+  static const doYouWantDeleteBook = "Do you want to delete book?";
+
+  static const deleteEntry = "Delete Entry";
+  static const doYouWantDeleteEntry = "Do you want to delete entry?";
 }

@@ -1,69 +1,29 @@
 import 'package:intl/intl.dart';
 
 import '../../../data/all.dart';
+import '../../../models/book_detail_model.dart';
 
 class DetailController extends GetxController {
   TextEditingController search = TextEditingController();
   RxInt isSelected = (-1).obs;
   RxInt isSelected2 = (-1).obs;
   RxBool isCustom = false.obs;
+  int bookId = 0;
+  String name = '';
+  BookDetailModel? bookDetailModel;
+  List<BookHistories> bookHistories = [];
+  List<BookHistories> finalBookHistories = [];
 
-  List<CommonModel> entriesList = [
-    CommonModel(name: "24 February 2024", list: [
-      CommonModel(
-        name: "Hair cut",
-        price: "3,000",
-        id: "-2,000",
-        icon: "at 5:04 pm",
-      ),
-      CommonModel(
-        name: "Hair cut",
-        price: "2,000",
-        id: "-30,000",
-        icon: "at 5:04 pm",
-      ),
-    ]),
-    CommonModel(name: "23 February 2024", list: [
-      CommonModel(
-        name: "Hair cut",
-        price: "2,000",
-        id: "-30,000",
-        icon: "at 5:04 pm",
-      ),
-      CommonModel(
-        name: "Hair cut",
-        price: "2,000",
-        id: "-30,000",
-        icon: "at 5:04 pm",
-      ),
-    ]),
-    CommonModel(
-      name: "22 February 2024",
-      list: [
-        CommonModel(
-          name: "Hair cut",
-          price: "5,000",
-          id: "-65,000",
-          icon: "at 5:04 pm",
-        ),
-        CommonModel(
-          name: "Hair cut",
-          price: "7,000",
-          id: "-89,000",
-          icon: "at 5:04 pm",
-        ),
-      ],
-    ),
-  ];
+  // RxString noDataFound = ''.obs;
 
   List<CommonModel> filterList = [
     CommonModel(
       name: "Select Date",
-      isCheck: true.obs,
+      isNetwork: true.obs,
     ),
     CommonModel(
       name: "Entry Type",
-      isCheck: false.obs,
+      isNetwork: false.obs,
     ),
   ];
 
@@ -79,6 +39,45 @@ class DetailController extends GetxController {
     "Cash In",
     "Cash Out",
   ];
+
+  @override
+  void onInit() {
+    if (Get.arguments != null) {
+      bookId = Get.arguments['bookId'];
+      name = Get.arguments['name'];
+    }
+    printAction('book id is ----------------->>>>>>${bookId}');
+    if (bookId != 0) {
+      getBookDetails();
+    }
+    super.onInit();
+  }
+
+  getBookDetails() async {
+    FormData formData = FormData.fromMap({
+      'book_id': bookId,
+    });
+    final data = await APIFunction().apiCall(apiName: Constants.getBookDetails, context: Get.context!, params: formData);
+    BookDetailModel model = BookDetailModel.fromJson(data);
+    if (model.responseCode == 1) {
+      bookDetailModel = model;
+      bookHistories = model.data!.bookHistories!;
+      finalBookHistories = model.data!.bookHistories!;
+    } else {
+      Utils().showToast(message: model.responseMsg!, context: Get.context!);
+    }
+    update();
+  }
+
+  searchField(String value) {
+    finalBookHistories = [];
+    bookHistories.forEach((element) {
+      if (element.remark!.toLowerCase().contains(value)) {
+        finalBookHistories.add(element);
+      }
+    });
+    update();
+  }
 
   selectDateSheet() {
     Get.bottomSheet(
@@ -523,10 +522,5 @@ class DetailController extends GetxController {
       selectedEndDate = picked;
       update();
     }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 }

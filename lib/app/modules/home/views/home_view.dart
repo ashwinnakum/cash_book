@@ -59,7 +59,7 @@ class HomeView extends GetView<HomeController> {
                 child: ListView(
                   controller: controller.scrollController,
                   physics: const ScrollPhysics(),
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 50.h),
                   children: [
                     Container(
                       color: Colors.transparent,
@@ -110,8 +110,8 @@ class HomeView extends GetView<HomeController> {
                                               AppText(
                                                   controller.homeData != null
                                                       ? Utils().currencyFormatChange(amount: controller.homeData?.netBalance)
-                                                      : '-1,000',
-                                                  fontFamily: FontFamily.medium,
+                                                      : '00',
+                                                  fontFamily: FontFamily.semiBold,
                                                   fontSize: 17.sp),
                                             ],
                                           ),
@@ -137,10 +137,8 @@ class HomeView extends GetView<HomeController> {
                                             ),
                                             const Spacer(),
                                             AppText(
-                                              controller.homeData != null
-                                                  ? Utils().currencyFormatChange(amount: controller.homeData?.totalIn)
-                                                  : '5,000',
-                                              fontFamily: FontFamily.medium,
+                                              controller.homeData != null ? Utils().currencyFormatChange(amount: controller.homeData?.totalIn) : '00',
+                                              fontFamily: FontFamily.semiBold,
                                               fontSize: 15.sp,
                                               color: AppColors.appGreenColor,
                                             ),
@@ -161,8 +159,8 @@ class HomeView extends GetView<HomeController> {
                                             AppText(
                                               controller.homeData != null
                                                   ? Utils().currencyFormatChange(amount: controller.homeData?.totalOut)
-                                                  : '6,000',
-                                              fontFamily: FontFamily.medium,
+                                                  : '00',
+                                              fontFamily: FontFamily.semiBold,
                                               fontSize: 15.sp,
                                               color: AppColors.appRedColor,
                                             ),
@@ -310,14 +308,14 @@ class HomeView extends GetView<HomeController> {
                               reverse: true,
                               shrinkWrap: true,
                               elements: controller.finalBookHistories,
-                              groupBy: (bookHistories) => DateTime.parse(
-                                      (bookHistories.bookHistory == null ? bookHistories.updatedAt : bookHistories.bookHistory?.updatedAt)!)
-                                  .toString(),
+                              groupBy: (bookHistories) => DateTime.parse(bookHistories.updatedAt!).toUtc().toString(),
                               groupSeparatorBuilder: (String groupByValue) => Container(),
                               itemBuilder: (context, element) {
                                 return GestureDetector(
                                   onTap: () {
-                                    Get.toNamed(Routes.DETAIL);
+                                    Get.toNamed(Routes.DETAIL, arguments: {'bookId': element.bookId, 'name': element.name})?.then((value) {
+                                      controller.homeApi(isLoading: false);
+                                    });
                                   },
                                   child: Container(
                                     color: AppColors.transparentColor,
@@ -347,7 +345,7 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                                 6.verticalSpace,
                                                 AppText(
-                                                  '${element.bookHistory == null ? '${Strings.createdOn}${Utils().timeAgoSinceDate(element.updatedAt!)}' : '${Strings.updatedOn}${Utils().timeAgoSinceDate((element.bookHistory?.updatedAt)!)}'}' /*'Updated on Feb 13 2024'*/,
+                                                  '${element.createdAt == element.updatedAt ? '${Strings.createdOn}${Utils().timeAgoSinceDate(element.updatedAt!)}' : '${Strings.updatedOn}${Utils().timeAgoSinceDate(element.updatedAt!)}'}',
                                                   color: AppColors.greyText,
                                                   fontSize: 12.5.sp,
                                                   fontFamily: FontFamily.regular,
@@ -362,7 +360,7 @@ class HomeView extends GetView<HomeController> {
                                               fontFamily: FontFamily.medium,
                                             ),
                                             5.horizontalSpace,
-                                            controller.childPopup()
+                                            controller.childPopup(bookId: element.bookId!, bookName: element.name!)
                                           ],
                                         ),
                                         Container(
@@ -376,76 +374,6 @@ class HomeView extends GetView<HomeController> {
                                 );
                               },
                             )
-                          /*ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: controller.homeData?.bookHistories?.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.only(top: 14.h, left: FontSize.defaultPadding, right: FontSize.defaultPadding),
-                              itemBuilder: (context, index) {
-                                BookHistories bookHistories = controller.homeData!.bookHistories![index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.DETAIL);
-                                  },
-                                  child: Container(
-                                    color: AppColors.transparentColor,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              height: 46.h,
-                                              width: 46.h,
-                                              padding: EdgeInsets.all(13.h),
-                                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary.withOpacity(0.05)),
-                                              child: Image.asset(
-                                                ImagePath.imagesMyBook,
-                                                color: AppColors.primary,
-                                              ),
-                                            ),
-                                            12.horizontalSpace,
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                AppText(
-                                                  bookHistories.name! ?? '',
-                                                  color: AppColors.blackColor,
-                                                  fontSize: 16.sp,
-                                                  fontFamily: FontFamily.medium,
-                                                ),
-                                                6.verticalSpace,
-                                                AppText(
-                                                  'Updated on Feb 13 2024',
-                                                  color: AppColors.greyText,
-                                                  fontSize: 12.5.sp,
-                                                  fontFamily: FontFamily.regular,
-                                                ),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            AppText(
-                                              bookHistories.bookHistory == null
-                                                  ? '00'
-                                                  : Utils().currencyFormatChange(amount: bookHistories.bookHistory?.amount),
-                                              color: AppColors.appRedColor,
-                                              fontSize: 14.sp,
-                                              fontFamily: FontFamily.medium,
-                                            ),
-                                            5.horizontalSpace,
-                                            controller.childPopup()
-                                          ],
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 46.h, top: 17.h, bottom: 17.h),
-                                          height: 0.8.h,
-                                          color: AppColors.greyText.withOpacity(0.2),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            )*/
                           : Padding(
                               padding: EdgeInsets.only(top: 150.h),
                               child: Center(

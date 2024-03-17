@@ -4,28 +4,149 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../commonWidget/common_bottom_sheet.dart';
+import '../../../models/book_detail_model.dart';
 
 class AddDetailController extends GetxController {
-  TextEditingController amount = TextEditingController();
+  TextEditingController amountController = TextEditingController();
   TextEditingController remark = TextEditingController();
-  String withScreen = Strings.cashIn;
+  String withScreen = Strings.add;
   FocusNode amountNode = FocusNode();
   DateTime datePicker = DateTime.now();
   TimeOfDay timerPicker = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
   RxString imageFile = "".obs;
   List<CommonModel> fileList = [];
-  String editScreen = Strings.add;
+  List<int> removeList = [];
+  String isPlus = Strings.inKey;
+  int bookId = 0;
+  BookHistories? bookHistories;
+  RxBool isAmountAvailable = false.obs;
+  int cnt = 0;
+  RxBool isNew = false.obs;
 
   @override
   Future<void> onInit() async {
-    printAction('----------------->>>>>>this is focus');
+    printAction('----------------->>>>>>this is focus${DateTime.now()}');
     if (Get.arguments != null) {
-      withScreen = Get.arguments[Strings.isPlus];
-      editScreen = Get.arguments[Strings.withScreen];
+      withScreen = Get.arguments[Strings.withScreen];
+      isPlus = Get.arguments[Strings.isPlus];
+      bookId = Get.arguments['bookId'] ?? 0;
+      bookHistories = Get.arguments['bookingModel'];
+    }
+    if (bookHistories != null) {
+      isAmountAvailable.value = true;
+      bookId = bookHistories!.bookId!;
+      dataFill();
     }
     await Future.delayed(Duration(milliseconds: 100));
     FocusScope.of(Get.context!).requestFocus(amountNode);
     super.onInit();
+  }
+
+  dataFill() {
+    amountController.text = bookHistories!.amount.toString();
+    remark.text = bookHistories!.remark!;
+    datePicker = DateTime.parse('${bookHistories!.entryDate} ${bookHistories!.entryTime}');
+    timerPicker = TimeOfDay(
+        hour: DateTime.parse('${bookHistories!.entryDate} ${bookHistories!.entryTime}').hour,
+        minute: DateTime.parse('${bookHistories!.entryDate} ${bookHistories!.entryTime}').minute);
+    for (int i = 0; i < bookHistories!.attaches!.length; i++) {
+      fileList.add(
+        CommonModel(
+          name: bookHistories!.attaches![i].name,
+          id: bookHistories!.attaches![i].mediaId,
+          isNetwork: true.obs,
+          type: bookHistories!.attaches![i].name?.split('.').last == 'pdf' ? Strings.isPdf : Strings.isGallery,
+        ),
+      );
+    }
+    printAction('fileList----------------->>>>>>${fileList.length}');
+    update();
+  }
+
+  validation() {
+    if (Utils().isValidationEmpty(amountController.text.trim())) {
+      Utils().showToast(message: 'Please enter amount', context: Get.context!);
+    } else {
+      if (withScreen == Strings.edit) {
+        editCashEntryApi();
+      } else {
+        addCashEntryApi();
+      }
+    }
+  }
+
+  addCashEntryApi() async {
+    FormData formData = FormData.fromMap({
+      'book_id': bookId,
+      'cash_type': isPlus,
+      'amount': amountController.text.trim(),
+      'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
+      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
+      'remark': remark.text.trim(),
+    });
+    for (int i = 0; i < fileList.length; i++) {
+      formData.files.addAll([MapEntry("file[]", await MultipartFile.fromFile(fileList[i].name!, filename: fileList[i].name!.split('/').last))]);
+    }
+    var data = await APIFunction().apiCall(apiName: Constants.addCashEntry, context: Get.context!, params: formData);
+    if (data['ResponseCode'] == 1) {
+      if (isNew.value) {
+        amountController.text = '';
+        remark.text = '';
+        fileList = [];
+        cnt++;
+        update();
+      } else {
+        Get.back(result: true);
+      }
+
+      Utils().showToast(
+          message: '${Strings.newEntryAddedToast} ${Utils().changeDateFormat(date: datePicker, outputFormat: 'dd MMM, yyy')}', context: Get.context!);
+    } else {}
+  }
+
+  editCashEntryApi() async {
+    FormData formData = FormData.fromMap({
+      'book_id': bookId,
+      'bh_id': bookHistories!.bhId!,
+      'cash_type': isPlus,
+      'amount': amountController.text.trim(),
+      'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
+      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
+      'remark': remark.text.trim(),
+      if (removeList.isNotEmpty) 'remove_media_ids': removeList.join(',')
+    });
+    for (int i = 0; i < fileList.length; i++) {
+      if (!fileList[i].isNetwork!.value) {
+        formData.files.addAll([MapEntry("file[]", await MultipartFile.fromFile(fileList[i].name!, filename: fileList[i].name!.split('/').last))]);
+      }
+    }
+
+    var data = await APIFunction().apiCall(apiName: Constants.updateCashEntry, context: Get.context!, params: formData);
+    if (data['ResponseCode'] == 1) {
+      if (isNew.value) {
+        amountController.text = '';
+        remark.text = '';
+        fileList = [];
+        cnt++;
+        withScreen = Strings.add;
+        update();
+      } else {
+        Get.back(result: true);
+      }
+      Utils().showToast(
+          message: '${Strings.newEntryAddedToast} ${Utils().changeDateFormat(date: datePicker, outputFormat: 'dd MMM, yyy')}', context: Get.context!);
+    } else {}
+  }
+
+  deleteCashEntryApi() async {
+    FormData formData = FormData.fromMap({
+      'bh_id': bookHistories!.bhId!,
+    });
+    var data = await APIFunction().apiCall(apiName: Constants.deleteCashEntry, context: Get.context!, params: formData);
+    if (data['ResponseCode'] == 1) {
+      Get.back(result: true);
+      Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
+    } else {}
   }
 
   pickerSheet() async {
@@ -169,7 +290,14 @@ class AddDetailController extends GetxController {
     );
     if (pickedFile != null) {
       imageFile = (pickedFile.path.obs);
-      fileList.add(CommonModel(name: imageFile.value, id: Strings.isGallery));
+      fileList.add(
+        CommonModel(
+          name: imageFile.value,
+          type: Strings.isGallery,
+          id: 0,
+          isNetwork: false.obs,
+        ),
+      );
       update();
     }
     update();
@@ -181,7 +309,12 @@ class AddDetailController extends GetxController {
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
-      fileList.add(CommonModel(name: result.files.first.path, id: Strings.isPdf));
+      fileList.add(CommonModel(
+        name: result.files.first.path,
+        type: Strings.isPdf,
+        id: 0,
+        isNetwork: false.obs,
+      ));
       update();
     }
   }
@@ -194,6 +327,7 @@ class AddDetailController extends GetxController {
       lastDate: DateTime(2101),
     ))!;
     print(DateFormat("yyyy-MM-dd").format(datePicker));
+    update();
   }
 
   showMyTimePicker(BuildContext context) async {
@@ -201,5 +335,7 @@ class AddDetailController extends GetxController {
       context: context,
       initialTime: timerPicker,
     ))!;
+
+    update();
   }
 }

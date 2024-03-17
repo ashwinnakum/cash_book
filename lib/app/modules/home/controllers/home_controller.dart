@@ -1,4 +1,5 @@
 import 'package:cash_book/app/commonWidget/common_bottom_sheet.dart';
+import 'package:cash_book/app/commonWidget/dialog.dart';
 import 'package:cash_book/app/data/all.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +15,7 @@ class HomeController extends GetxController {
   HomeData? homeData;
   List<BookHistories> bookHistories = [];
   List<BookHistories> finalBookHistories = [];
-  RxString noDataFound = Strings.noDataFound.obs;
+  RxString noDataFound = ''.obs;
 
   List<CommonModel> suggestionList = [
     CommonModel(name: '${Utils().changeDateFormat(date: DateTime.now(), outputFormat: 'MMMM')} Expenses'),
@@ -50,9 +51,9 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  homeApi() async {
+  homeApi({bool isLoading = true}) async {
     FormData formData = FormData();
-    final data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData);
+    final data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
     HomeModel model = HomeModel.fromJson(data);
     if (model.responseCode == 1) {
       homeData = model.data;
@@ -62,6 +63,41 @@ class HomeController extends GetxController {
         noDataFound.value = Strings.noDataFound;
       }
       update();
+    }
+  }
+
+  addUpdateBookApi({int bookId = 0}) async {
+    FormData formData = FormData.fromMap({
+      'name': addBookNameController.text.trim(),
+      if (bookId != 0) 'book_id': bookId,
+    });
+    final data = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
+    if (data['ResponseCode'] == 1) {
+      Get.back();
+      if (bookId != 0) {
+        Get.back();
+        Utils().showToast(message: Strings.bookNameUpdatedSuccessfully, context: Get.context!);
+        homeApi();
+      } else {
+        Get.toNamed(Routes.DETAIL, arguments: {
+          'bookId': data['data']['book_id'],
+          'name': data['data']['name'],
+        })?.then((value) => homeApi(isLoading: false));
+      }
+    } else {
+      Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
+    }
+  }
+
+  deleteBookApi({int bookId = 0}) async {
+    FormData formData = FormData.fromMap({
+      if (bookId != 0) 'book_id': bookId,
+    });
+    final data = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
+    Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
+    if (data['ResponseCode'] == 1) {
+      homeApi();
+      Get.back();
     }
   }
 
@@ -75,7 +111,7 @@ class HomeController extends GetxController {
     update();
   }
 
-  addBookSheet({bool isEdit = false}) async {
+  addBookSheet({int bookId = 0}) async {
     showModalBottomSheet(
       context: Get.context!,
       isScrollControlled: true,
@@ -99,7 +135,7 @@ class HomeController extends GetxController {
                               child: Icon(Icons.close, size: 26.h)),
                           25.horizontalSpace,
                           AppText(
-                            isEdit ? Strings.editCashBook : Strings.addNewBook,
+                            bookId != 0 ? Strings.editCashBook : Strings.addNewBook,
                             fontSize: 18.sp,
                             color: AppColors.blackColor,
                             fontFamily: FontFamily.semiBold,
@@ -140,7 +176,7 @@ class HomeController extends GetxController {
                             ),
                           ),
                           Visibility(
-                            visible: !isEdit,
+                            visible: bookId == 0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -177,11 +213,12 @@ class HomeController extends GetxController {
                           40.verticalSpace,
                           CommonButton(
                             onTap: () {
-                              Get.back();
-                              // if (addBookController.text.trim().isNotEmpty) {}
+                              if (addBookNameController.text.trim().isNotEmpty) {
+                                addUpdateBookApi(bookId: bookId);
+                              }
                             },
-                            text: isEdit ? Strings.save : Strings.addNewBook.toUpperCase(),
-                            isLeftButton: !isEdit,
+                            text: bookId != 0 ? Strings.save : Strings.addNewBook.toUpperCase(),
+                            isLeftButton: bookId == 0,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
                             textColor: addBookNameController.text.trim().isNotEmpty ? AppColors.whiteColor : AppColors.greyText.withOpacity(0.9),
                             color: addBookNameController.text.trim().isNotEmpty ? AppColors.primary : AppColors.greyText.withOpacity(0.35),
@@ -204,7 +241,9 @@ class HomeController extends GetxController {
           },
         );
       },
-    );
+    ).then((value) {
+      addBookNameController.text = '';
+    });
     await Future.delayed(Duration(milliseconds: 100));
     FocusScope.of(Get.context!).requestFocus(searchNode);
   }
@@ -508,7 +547,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Widget childPopup() => PopupMenuButton<int>(
+  Widget childPopup({int bookId = 0, String bookName = ''}) => PopupMenuButton<int>(
         itemBuilder: (context) => [
           const PopupMenuItem(
             value: 1,
@@ -520,15 +559,19 @@ class HomeController extends GetxController {
           const PopupMenuItem(
             value: 2,
             child: Text(
-              "Delete",
+              "Delete Book",
               style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
             ),
           ),
         ],
         onSelected: (value) {
           if (value == 1) {
-            addBookNameController.text = 'My Book';
-            addBookSheet(isEdit: true);
+            addBookNameController.text = bookName;
+            addBookSheet(bookId: bookId);
+          } else {
+            showConfirmDialog(Get.context!, Strings.deleteBook, Strings.doYouWantDeleteBook, Strings.delete, Strings.cancel, () {
+              deleteBookApi(bookId: bookId);
+            });
           }
         },
         elevation: 5,

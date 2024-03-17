@@ -333,7 +333,7 @@ class Utils {
   /// Time Ago Since Date --------- >>>
   String timeAgoSinceDate(String dateString, {bool numericDates = false}) {
     DateTime dateUtc = DateTime.parse(dateString);
-    var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateUtc.toString(), false);
+    var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateUtc.toString(), true);
     DateTime date = dateTime.toLocal();
     final date2 = DateTime.now();
     final difference = date2.difference(date);

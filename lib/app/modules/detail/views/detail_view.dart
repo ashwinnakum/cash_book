@@ -1,7 +1,9 @@
+import 'package:grouped_list/grouped_list.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 import '../../../data/all.dart';
+import '../../../models/book_detail_model.dart';
 import '../controllers/detail_controller.dart';
 
 class DetailView extends GetView<DetailController> {
@@ -20,7 +22,7 @@ class DetailView extends GetView<DetailController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Visibility(
-                    visible: isFirst.value,
+                    visible: controller.bookDetailModel != null && controller.bookDetailModel!.data!.bookHistories!.isEmpty,
                     child: Column(
                       children: [
                         20.verticalSpace,
@@ -31,23 +33,20 @@ class DetailView extends GetView<DetailController> {
                           fontFamily: FontFamily.semiBold,
                         ),
                         10.verticalSpace,
-                        Lottie.asset(ImagePath.imagesDownArrow,
-                            height: 70.h,
-                            width: 70.h,
-                            fit: BoxFit.cover,
-                            delegates: LottieDelegates(
-                              values: [
-                                ValueDelegate.color(
-                                  const ['**', 'wave_2 Outlines', '**'],
-                                  value: Colors.orange,
-                                ),
-                              ],
-                            )),
-                        /* Icon(
-                          Icons.arrow_downward_outlined,
-                          color: AppColors.primary,
-                          size: 35.h,
-                        ),*/
+                        Lottie.asset(
+                          ImagePath.imagesDownArrow,
+                          height: 70.h,
+                          width: 70.h,
+                          fit: BoxFit.cover,
+                          delegates: LottieDelegates(
+                            values: [
+                              ValueDelegate.color(
+                                const ['**', 'wave_2 Outlines', '**'],
+                                value: Colors.orange,
+                              ),
+                            ],
+                          ),
+                        ),
                         20.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -80,11 +79,17 @@ class DetailView extends GetView<DetailController> {
                       Expanded(
                         child: CommonButton(
                           onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: {Strings.withScreen: Strings.add, Strings.isPlus: Strings.cashIn})!
+                            Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                              Strings.withScreen: Strings.add,
+                              Strings.isPlus: Strings.inKey,
+                              'bookId': controller.bookId,
+                            })!
                                 .then((value) {
                               Utils().appStatusBar();
-                              isFirst.value = false;
                               controller.update();
+                              if (value is bool && value) {
+                                controller.getBookDetails();
+                              }
                             });
                           },
                           text: Strings.cashIn,
@@ -105,11 +110,17 @@ class DetailView extends GetView<DetailController> {
                       Expanded(
                         child: CommonButton(
                           onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: {Strings.withScreen: Strings.add, Strings.isPlus: Strings.cashOut})!
+                            Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                              Strings.withScreen: Strings.add,
+                              Strings.isPlus: Strings.outKey,
+                              'bookId': controller.bookId,
+                            })!
                                 .then((value) {
                               Utils().appStatusBar();
-                              isFirst.value = false;
                               controller.update();
+                              if (value is bool && value) {
+                                controller.getBookDetails();
+                              }
                             });
                           },
                           text: Strings.cashOut,
@@ -153,7 +164,7 @@ class DetailView extends GetView<DetailController> {
                     ),
                     18.horizontalSpace,
                     AppText(
-                      'My Book',
+                      controller.name,
                       color: AppColors.whiteColor,
                       fontSize: FontSize.s18,
                       fontFamily: FontFamily.semiBold,
@@ -216,8 +227,10 @@ class DetailView extends GetView<DetailController> {
                                                 ),
                                                 const Spacer(),
                                                 AppText(
-                                                  '-1,000',
-                                                  fontFamily: FontFamily.medium,
+                                                  controller.bookDetailModel != null
+                                                      ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.netBalance)
+                                                      : '00',
+                                                  fontFamily: FontFamily.semiBold,
                                                   fontSize: 17.sp,
                                                 ),
                                               ],
@@ -244,8 +257,10 @@ class DetailView extends GetView<DetailController> {
                                               ),
                                               const Spacer(),
                                               AppText(
-                                                '5,000',
-                                                fontFamily: FontFamily.medium,
+                                                controller.bookDetailModel != null
+                                                    ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalIn)
+                                                    : '00',
+                                                fontFamily: FontFamily.semiBold,
                                                 fontSize: 15.sp,
                                                 color: AppColors.appGreenColor,
                                               ),
@@ -264,8 +279,10 @@ class DetailView extends GetView<DetailController> {
                                               ),
                                               const Spacer(),
                                               AppText(
-                                                '6,000',
-                                                fontFamily: FontFamily.medium,
+                                                controller.bookDetailModel != null
+                                                    ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalOut)
+                                                    : '00',
+                                                fontFamily: FontFamily.semiBold,
                                                 fontSize: 15.sp,
                                                 color: AppColors.appRedColor,
                                               ),
@@ -321,189 +338,201 @@ class DetailView extends GetView<DetailController> {
                           ],
                         ),
                       ),
-                      Visibility(
-                        visible: !isFirst.value,
-                        child: Column(
-                          children: [
-                            StickyHeader(
-                              header: Container(
-                                color: AppColors.greBackgroundColor,
-                                child: Column(
-                                  children: [
-                                    10.verticalSpace,
-                                    Container(
-                                      margin: EdgeInsets.symmetric(horizontal: FontSize.defaultPadding),
-                                      width: double.infinity,
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: CommonTextField(
-                                              controller: controller.search,
-                                              hintText: Strings.searchCustomer,
-                                              prefixIcon: Padding(
-                                                padding: EdgeInsets.all(13.h),
-                                                child: Image.asset(
-                                                  ImagePath.imagesIcDarkSearch,
-                                                  height: 16.h,
-                                                  width: 16.h,
-                                                  color: AppColors.primary,
+                      controller.bookHistories.isNotEmpty
+                          ? Column(
+                              children: [
+                                StickyHeader(
+                                  header: Container(
+                                    color: AppColors.greBackgroundColor,
+                                    child: Column(
+                                      children: [
+                                        10.verticalSpace,
+                                        Container(
+                                          margin: EdgeInsets.symmetric(horizontal: FontSize.defaultPadding),
+                                          width: double.infinity,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: CommonTextField(
+                                                  controller: controller.search,
+                                                  hintText: Strings.searchCustomer,
+                                                  prefixIcon: Padding(
+                                                    padding: EdgeInsets.all(13.h),
+                                                    child: Image.asset(
+                                                      ImagePath.imagesIcDarkSearch,
+                                                      height: 16.h,
+                                                      width: 16.h,
+                                                      color: AppColors.primary,
+                                                    ),
+                                                  ),
+                                                  suffixIcon: Visibility(
+                                                    visible: controller.search.text.trim().isNotEmpty,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        controller.search.text = '';
+                                                        controller.finalBookHistories = controller.bookHistories;
+                                                        controller.update();
+                                                      },
+                                                      child: Container(
+                                                        color: AppColors.transparentColor,
+                                                        child: Padding(
+                                                          padding: EdgeInsets.all(13.h),
+                                                          child: Icon(Icons.close, color: AppColors.greyText.withOpacity(0.8)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onChanged: (p0) => controller.searchField(p0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        10.verticalSpace,
+                                        SizedBox(
+                                          height: 40.h,
+                                          width: double.infinity,
+                                          child: ListView.builder(
+                                            itemCount: controller.filterList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              CommonModel model = controller.filterList[index];
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  controller.isSelected.value = (-1);
+                                                  if (index == 0) {
+                                                    controller.isCustom.value = false;
+                                                    controller.selectDateSheet();
+                                                    controller.update();
+                                                  } else {
+                                                    controller.entryTypeSheet();
+                                                  }
+                                                },
+                                                child: Container(
+                                                  height: 50,
+                                                  margin: EdgeInsets.only(right: 8.h),
+                                                  padding: EdgeInsets.symmetric(horizontal: 10.h),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(12.r),
+                                                    border: Border.all(color: AppColors.greyText),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      model.isNetwork!.value
+                                                          ? Icon(
+                                                              Icons.calendar_month,
+                                                              size: 15.h,
+                                                            )
+                                                          : 0.verticalSpace,
+                                                      4.horizontalSpace,
+                                                      AppText(
+                                                        index == 0
+                                                            ? controller.isSelected.value != (-1)
+                                                                ? controller.selectDateFilter[controller.isSelected.value]
+                                                                : model.name ?? ""
+                                                            : controller.isSelected2.value != (-1)
+                                                                ? controller.entryTypeFilter[controller.isSelected2.value]
+                                                                : model.name ?? "",
+                                                        fontSize: FontSize.s14,
+                                                        color: AppColors.darkText,
+                                                        fontFamily: FontFamily.regular,
+                                                      ),
+                                                      4.horizontalSpace,
+                                                      Icon(Icons.arrow_drop_down),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        10.verticalSpace,
+                                      ],
+                                    ),
+                                  ),
+                                  content: Column(
+                                    children: [
+                                      8.verticalSpace,
+                                      Visibility(
+                                        visible: controller.finalBookHistories.isNotEmpty,
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Center(
+                                                child: Divider(
+                                                  color: AppColors.greyText.withOpacity(0.5),
+                                                  thickness: 0.5.h,
+                                                  height: 0,
                                                 ),
                                               ),
                                             ),
-                                          ), /*
-                                          15.horizontalSpace,
-                                          Column(
-                                            children: [
-                                              Image.asset(
-                                                ImagePath.imagesIcFilter,
-                                                height: 25.h,
-                                                width: 25.h,
-                                                color: AppColors.primary,
-                                              ),
-                                              2.verticalSpace,
-                                              AppText(
-                                                'Filter',
-                                                fontSize: 10.sp,
-                                                color: AppColors.primary,
-                                              )
-                                            ],
-                                          ),
-                                          5.horizontalSpace*/
-                                        ],
-                                      ),
-                                    ),
-                                    10.verticalSpace,
-                                    SizedBox(
-                                      height: 40.h,
-                                      width: double.infinity,
-                                      child: ListView.builder(
-                                        itemCount: controller.filterList.length,
-                                        scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          CommonModel model = controller.filterList[index];
-                                          return GestureDetector(
-                                            onTap: () {
-                                              controller.isSelected.value = (-1);
-                                              if (index == 0) {
-                                                controller.isCustom.value = false;
-                                                controller.selectDateSheet();
-                                                controller.update();
-                                              } else {
-                                                controller.entryTypeSheet();
-                                              }
-                                            },
-                                            child: Container(
-                                              height: 50,
-                                              margin: EdgeInsets.only(right: 8.h),
-                                              padding: EdgeInsets.symmetric(horizontal: 10.h),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(12.r),
-                                                border: Border.all(color: AppColors.greyText),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  model.isCheck!.value
-                                                      ? Icon(
-                                                          Icons.calendar_month,
-                                                          size: 15.h,
-                                                        )
-                                                      : 0.verticalSpace,
-                                                  4.horizontalSpace,
-                                                  AppText(
-                                                    index == 0
-                                                        ? controller.isSelected.value != (-1)
-                                                            ? controller.selectDateFilter[controller.isSelected.value]
-                                                            : model.name ?? ""
-                                                        : controller.isSelected2.value != (-1)
-                                                            ? controller.entryTypeFilter[controller.isSelected2.value]
-                                                            : model.name ?? "",
-                                                    fontSize: FontSize.s14,
-                                                    color: AppColors.darkText,
-                                                    fontFamily: FontFamily.regular,
-                                                  ),
-                                                  4.horizontalSpace,
-                                                  Icon(Icons.arrow_drop_down),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    10.verticalSpace,
-                                  ],
-                                ),
-                              ),
-                              content: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Center(
-                                          child: Divider(
-                                            color: AppColors.greyText.withOpacity(0.5),
-                                            thickness: 0.5.h,
-                                            height: 0,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 2.h),
-                                        child: AppText(
-                                          "Showing ${controller.entriesList.length} entries",
-                                          color: AppColors.greyText,
-                                          fontSize: FontSize.s14,
-                                          fontFamily: FontFamily.semiBold,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Center(
-                                          child: Divider(
-                                            height: 0,
-                                            color: AppColors.greyText.withOpacity(0.5),
-                                            thickness: 0.5.h,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: controller.entriesList.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.only(top: 8.h, left: 0, right: 0),
-                                    itemBuilder: (context, index) {
-                                      CommonModel data = controller.entriesList[index];
-                                      return Container(
-                                        color: Colors.transparent,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            15.verticalSpace,
                                             Padding(
-                                              padding: EdgeInsets.only(left: 20.h),
+                                              padding: EdgeInsets.only(left: 10.w, right: 10.w),
                                               child: AppText(
-                                                data.name ?? "",
-                                                fontFamily: FontFamily.semiBold,
+                                                "Showing ${controller.finalBookHistories.length} entries",
                                                 color: AppColors.greyText,
                                                 fontSize: FontSize.s14,
+                                                fontFamily: FontFamily.medium,
                                               ),
                                             ),
-                                            ListView.builder(
-                                              itemCount: data.list!.length,
-                                              padding: EdgeInsets.only(top: 10.h),
-                                              shrinkWrap: true,
+                                            Expanded(
+                                              child: Center(
+                                                child: Divider(
+                                                  height: 0,
+                                                  color: AppColors.greyText.withOpacity(0.5),
+                                                  thickness: 0.5.h,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      controller.finalBookHistories.isEmpty && controller.bookDetailModel != null
+                                          ? Padding(
+                                              padding: EdgeInsets.only(top: 100.h),
+                                              child: Center(
+                                                child: AppText(
+                                                  Strings.noDataFound,
+                                                  color: AppColors.greyText,
+                                                  fontSize: 16.sp,
+                                                ),
+                                              ),
+                                            )
+                                          : GroupedListView<BookHistories, String>(
+                                              padding: EdgeInsets.only(top: 5.h),
                                               physics: NeverScrollableScrollPhysics(),
-                                              itemBuilder: (context, index) {
-                                                CommonModel model = data.list![index];
+                                              reverse: true,
+                                              shrinkWrap: true,
+                                              elements: controller.finalBookHistories,
+                                              groupBy: (bookHistories) => Utils().changeDateFormat(
+                                                  date: DateTime.parse('${bookHistories.entryDate!}' ' ${bookHistories.entryTime}'),
+                                                  outputFormat: 'yyyy-MM-dd 00:00:00'),
+                                              groupSeparatorBuilder: (String groupByValue) => Padding(
+                                                padding: EdgeInsets.only(left: 20.h, top: 12.h, bottom: 16.h),
+                                                child: AppText(
+                                                  '${Utils().changeDateFormat(date: DateTime.parse(groupByValue), outputFormat: 'dd MMM yyyy')}',
+                                                  fontFamily: FontFamily.semiBold,
+                                                  color: AppColors.greyText,
+                                                  fontSize: FontSize.s14,
+                                                ),
+                                              ),
+                                              itemBuilder: (context, element) {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     Get.toNamed(Routes.ADD_DETAIL, arguments: {
                                                       Strings.withScreen: Strings.edit,
-                                                      Strings.isPlus: index % 2 != 0 ? Strings.cashIn : Strings.cashOut
+                                                      Strings.isPlus: element.cashType,
+                                                      'bookingModel': element
+                                                    })!
+                                                        .then((value) {
+                                                      Utils().appStatusBar();
+                                                      controller.update();
+                                                      if (value is bool && value) {
+                                                        controller.getBookDetails();
+                                                      }
                                                     });
                                                   },
                                                   child: Container(
@@ -534,14 +563,14 @@ class DetailView extends GetView<DetailController> {
                                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                                 children: [
                                                                   AppText(
-                                                                    model.price ?? "N/A",
-                                                                    color: index % 2 == 0 ? AppColors.marron : AppColors.green,
+                                                                    '${Utils().currencyFormatChange(amount: element.amount)}' ?? "N/A",
+                                                                    color: element.cashType == Strings.outKey ? AppColors.marron : AppColors.green,
                                                                     fontFamily: FontFamily.bold,
                                                                     fontSize: FontSize.s16,
                                                                   ),
                                                                   5.verticalSpace,
                                                                   AppText(
-                                                                    "Balance: ${model.id ?? "N/A"}",
+                                                                    "Balance: ${'${element.balance}' ?? "N/A"}",
                                                                     color: AppColors.greyText,
                                                                     fontFamily: FontFamily.medium,
                                                                     fontSize: FontSize.s14,
@@ -553,7 +582,7 @@ class DetailView extends GetView<DetailController> {
                                                         ),
                                                         8.verticalSpace,
                                                         AppText(
-                                                          model.name ?? "",
+                                                          element.remark ?? "",
                                                           color: AppColors.darkText,
                                                           fontSize: FontSize.s14,
                                                           fontFamily: FontFamily.medium,
@@ -574,7 +603,10 @@ class DetailView extends GetView<DetailController> {
                                                             ),
                                                             5.horizontalSpace,
                                                             AppText(
-                                                              model.icon ?? "",
+                                                              Utils().changeDateFormat(
+                                                                      date: DateTime.parse('${element.entryDate}' ' ${'${element.entryTime}'}'),
+                                                                      outputFormat: 'hh:mm:a') ??
+                                                                  "",
                                                               color: AppColors.greyText,
                                                               fontFamily: FontFamily.medium,
                                                               fontSize: FontSize.s14,
@@ -588,17 +620,12 @@ class DetailView extends GetView<DetailController> {
                                                 );
                                               },
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                    ],
                                   ),
-                                ],
-                              ),
+                                )
+                              ],
                             )
-                          ],
-                        ),
-                      )
+                          : SizedBox(),
                     ],
                   ),
                 ),

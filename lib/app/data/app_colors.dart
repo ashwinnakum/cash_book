@@ -31,10 +31,10 @@ class AppColors {
   static const Color mango = Color(0xFFBFA750);
   static const Color sky = Color(0xFF50BFAB);
   static const Color darkSky = Color(0xFF5097BF);
-  static const Color red = Color(0xFFFF6464);
+  static const Color red = Color(0xFFc93b3a);
   static const Color orange = Color(0xFFBF6B50);
   static const Color marron = Color(0xFFBF5050);
-  static const Color green = Color(0xFF50BF83);
+  static const Color green = Color(0xFF127e40);
   static const Color textFieldBackground = Color(0xFFF5F5F5);
   static const Color shadow = Color(0x2B343228);
   static const Color mapBoxColor = Color(0xFFF5F5EA);

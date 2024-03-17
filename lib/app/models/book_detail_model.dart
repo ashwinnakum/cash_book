@@ -1,14 +1,14 @@
-class HomeModel {
-  HomeData? data;
+class BookDetailModel {
+  Data? data;
   int? responseCode;
   String? responseMsg;
   String? result;
   String? serverTime;
 
-  HomeModel({this.data, this.responseCode, this.responseMsg, this.result, this.serverTime});
+  BookDetailModel({this.data, this.responseCode, this.responseMsg, this.result, this.serverTime});
 
-  HomeModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new HomeData.fromJson(json['data']) : null;
+  BookDetailModel.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     responseCode = json['ResponseCode'];
     responseMsg = json['ResponseMsg'];
     result = json['Result'];
@@ -28,18 +28,20 @@ class HomeModel {
   }
 }
 
-class HomeData {
+class Data {
   int? netBalance;
   int? totalIn;
   int? totalOut;
+  int? totalBookHistories;
   List<BookHistories>? bookHistories;
 
-  HomeData({this.netBalance, this.totalIn, this.totalOut, this.bookHistories});
+  Data({this.netBalance, this.totalIn, this.totalOut, this.totalBookHistories, this.bookHistories});
 
-  HomeData.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     netBalance = json['net_balance'];
     totalIn = json['total_in'];
     totalOut = json['total_out'];
+    totalBookHistories = json['total_book_histories'];
     if (json['book_histories'] != null) {
       bookHistories = <BookHistories>[];
       json['book_histories'].forEach((v) {
@@ -53,6 +55,7 @@ class HomeData {
     data['net_balance'] = this.netBalance;
     data['total_in'] = this.totalIn;
     data['total_out'] = this.totalOut;
+    data['total_book_histories'] = this.totalBookHistories;
     if (this.bookHistories != null) {
       data['book_histories'] = this.bookHistories!.map((v) => v.toJson()).toList();
     }
@@ -61,71 +64,87 @@ class HomeData {
 }
 
 class BookHistories {
-  int? bookId;
-  String? name;
-  String? updatedAt;
-  String? createdAt;
-  BookHistoryData? bookHistory;
-
-  BookHistories({this.bookId, this.name, this.updatedAt, this.bookHistory});
-
-  BookHistories.fromJson(Map<String, dynamic> json) {
-    bookId = json['book_id'];
-    name = json['name'];
-    updatedAt = json['updated_at'];
-    createdAt = json['created_at'];
-    bookHistory = json['book_history'] != null ? new BookHistoryData.fromJson(json['book_history']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['book_id'] = this.bookId;
-    data['name'] = this.name;
-    data['updated_at'] = this.updatedAt;
-    data['created_at'] = this.createdAt;
-    if (this.bookHistory != null) {
-      data['book_history'] = this.bookHistory!.toJson();
-    }
-    return data;
-  }
-}
-
-class BookHistoryData {
   int? bhId;
   int? bookId;
-  String? cacheType;
+  String? cashType;
   int? amount;
+  int? balance;
   String? remark;
   String? entryDate;
   String? entryTime;
-  String? media;
+  String? createdAt;
   String? updatedAt;
+  List<Attaches>? attaches;
 
-  BookHistoryData({this.bhId, this.bookId, this.cacheType, this.amount, this.remark, this.entryDate, this.entryTime, this.media, this.updatedAt});
+  BookHistories(
+      {this.bhId,
+      this.bookId,
+      this.cashType,
+      this.amount,
+      this.balance,
+      this.remark,
+      this.entryDate,
+      this.entryTime,
+      this.createdAt,
+      this.updatedAt,
+      this.attaches});
 
-  BookHistoryData.fromJson(Map<String, dynamic> json) {
+  BookHistories.fromJson(Map<String, dynamic> json) {
     bhId = json['bh_id'];
     bookId = json['book_id'];
-    cacheType = json['cache_type'];
+    cashType = json['cash_type'];
     amount = json['amount'];
+    balance = json['balance'];
     remark = json['remark'];
     entryDate = json['entry_date'];
     entryTime = json['entry_time'];
-    media = json['media'];
+    createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if (json['attaches'] != null) {
+      attaches = <Attaches>[];
+      json['attaches'].forEach((v) {
+        attaches!.add(new Attaches.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['bh_id'] = this.bhId;
     data['book_id'] = this.bookId;
-    data['cache_type'] = this.cacheType;
+    data['cash_type'] = this.cashType;
     data['amount'] = this.amount;
+    data['balance'] = this.balance;
     data['remark'] = this.remark;
     data['entry_date'] = this.entryDate;
     data['entry_time'] = this.entryTime;
-    data['media'] = this.media;
+    data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    if (this.attaches != null) {
+      data['attaches'] = this.attaches!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Attaches {
+  int? mediaId;
+  int? bhId;
+  String? name;
+
+  Attaches({this.mediaId, this.bhId, this.name});
+
+  Attaches.fromJson(Map<String, dynamic> json) {
+    mediaId = json['media_id'];
+    bhId = json['bh_id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['media_id'] = this.mediaId;
+    data['bh_id'] = this.bhId;
+    data['name'] = this.name;
     return data;
   }
 }

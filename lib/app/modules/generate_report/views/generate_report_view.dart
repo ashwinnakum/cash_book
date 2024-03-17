@@ -107,7 +107,7 @@ class GenerateReportView extends GetView<GenerateReportController> {
                               ),
                               4.verticalSpace,
                               AppText(
-                                controller.reportList[index].id!,
+                                controller.reportList[index].type!,
                                 color: AppColors.greyColor.withOpacity(0.8),
                                 fontSize: FontSize.s14,
                                 fontFamily: FontFamily.medium,

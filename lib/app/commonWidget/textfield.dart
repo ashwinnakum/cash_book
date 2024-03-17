@@ -127,6 +127,8 @@ class CommonAppTextField extends StatelessWidget {
   TextInputType? keyboardType;
   FocusNode? focusNode;
 
+  final Function(String)? onChanged;
+
   CommonAppTextField(
       {Key? key,
       this.style,
@@ -148,6 +150,7 @@ class CommonAppTextField extends StatelessWidget {
       this.color,
       this.keyboardType,
       this.focusNode,
+      this.onChanged,
       this.maxLines})
       : super(key: key);
 
@@ -160,6 +163,7 @@ class CommonAppTextField extends StatelessWidget {
       maxLines: isMaxLines! ? null : maxLines,
       style: AppTextStyle(textColor: Colors.black),
       keyboardType: keyboardType ?? TextInputType.text,
+      onChanged: onChanged,
       decoration: InputDecoration(
         alignLabelWithHint: true,
         enabled: enabled,
