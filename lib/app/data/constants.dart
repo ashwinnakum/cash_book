@@ -3,7 +3,7 @@ import 'package:cash_book/app/data/all.dart';
 RxBool isFirst = true.obs;
 
 class Constants {
-  static const String apiKey = '2b223e5cee713615ha54ac203b24e9a123703mk411';
+  static const String apiKey = 'jExwb7PralnoOTGSd42SDFSgO0xczgrGedQvpLwo4W';
   static const emailRegX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
   static const nameRegX = r'^(?=.*[a-zA-Z])[\s\S]{2,}$';
   static const phoneRegX = r'^\+?(\d{1,4})?\s?[-.\s]?(\d+[-.\s]?){6,}$';
@@ -13,15 +13,16 @@ class Constants {
   static const String YYYY_MM_DD_HH_MM_SS_24 = 'yyyy-MM-dd HH:mm:ss';
 
 //todo ------ base url ---------//
-  static const String baseUrl = 'https://www.jetnexa.com/wp-json/jetnexa/v1/';
+  static const String baseUrl = 'https://ds-staging.000webhostapp.com/money_book/api/';
   static String versionName = '';
 
 //todo ------ api collection ---------//
-  static const String register = 'register';
   static const String login = 'login';
-  static const String forgotPassword = 'forgot-password';
-  static const String resetPassword = 'reset-password';
-  static const String userProfile = 'user-profile';
-  static const String userUpdate = 'user-update';
-  static const String forgotPasswordTokenVerification = 'forgot-password-token-verification';
+  static const String home = 'home';
+  static const String addUpdateBook = 'addUpdateBook';
+  static const String deleteBook = 'deleteBook';
+  static const String getBooks = 'getBooks';
+  static const String getBookDetails = 'getBookDetails';
+  static const String addCashEntry = 'addCashEntry';
+  static const String deleteCashEntry = 'deleteCashEntry';
 }

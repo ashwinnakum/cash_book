@@ -11,13 +11,20 @@ class ImagePath {
   static const String fontsPoppinsMedium = 'assets/fonts/Poppins-Medium.ttf';
   static const String fontsPoppinsRegular = 'assets/fonts/Poppins-Regular.ttf';
   static const String fontsPoppinsSemiBold = 'assets/fonts/Poppins-SemiBold.ttf';
+  static const String imagesDownArrow = 'assets/images/down_arrow.json';
   static const String imagesIcBack = 'assets/images/ic_back.png';
   static const String imagesIcBlankPdf = 'assets/images/ic_blank_pdf.png';
+  static const String imagesIcBluePdf = 'assets/images/ic_blue_pdf.png';
   static const String imagesIcBusiness = 'assets/images/ic_business.svg';
+  static const String imagesIcColorPdf = 'assets/images/ic_color_pdf.png';
   static const String imagesIcDarkSearch = 'assets/images/ic_dark_search.png';
+  static const String imagesIcExcel = 'assets/images/ic_excel.png';
   static const String imagesIcFilter = 'assets/images/ic_filter.png';
+  static const String imagesIcNewAttach = 'assets/images/ic_new_attach.png';
   static const String imagesIcPdf = 'assets/images/ic_pdf.png';
+  static const String imagesIcPdfNew = 'assets/images/ic_pdf_new.png';
   static const String imagesIcRedPdf = 'assets/images/ic_red_pdf.png';
   static const String imagesIcSearch = 'assets/images/ic_search.png';
+  static const String imagesIcSplash = 'assets/images/ic_splash.json';
   static const String imagesMyBook = 'assets/images/my_book.png';
 }

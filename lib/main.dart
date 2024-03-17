@@ -22,6 +22,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.fadeIn,
         title: Strings.appName,
+        theme: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: AppColors.primary,
+            selectionHandleColor: AppColors.primary,
+            selectionColor: AppColors.primary.withOpacity(0.2),
+          ),
+        ),
         builder: EasyLoading.init(),
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,

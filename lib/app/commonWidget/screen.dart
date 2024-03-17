@@ -5,12 +5,14 @@ class CommonScreen extends StatelessWidget {
   Widget floatingActionButton;
   Widget? bottomNavigationBarWidget;
   Color? backgroundColor;
+  bool resizeToAvoidBottomInset;
 
   CommonScreen({
     super.key,
     this.bottomNavigationBarWidget,
     this.child,
     this.backgroundColor,
+    this.resizeToAvoidBottomInset = false,
     this.floatingActionButton = const SizedBox(),
   });
 
@@ -28,7 +30,7 @@ class CommonScreen extends StatelessWidget {
           floatingActionButton: floatingActionButton,
           bottomNavigationBar: bottomNavigationBarWidget ?? const SizedBox(),
           backgroundColor: backgroundColor ?? AppColors.primary,
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           body: child,
         ),
       ),

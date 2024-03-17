@@ -170,8 +170,13 @@ class Utils {
       gravity: ToastGravity.BOTTOM,
       toastLength: Toast.LENGTH_SHORT,
       textColor: Colors.white,
-      backgroundColor: Colors.black26,
+      backgroundColor: Colors.white.withOpacity(0),
     );
+  }
+
+  /// <<< To show toast massage  --------- >>>
+  String currencyFormatChange({required dynamic amount}) {
+    return NumberFormat("#,##0", "en_US").format(amount);
   }
 
   /// <<< To transfer string to Md5 --------- >>>
@@ -326,7 +331,31 @@ class Utils {
   }
 
   /// Time Ago Since Date --------- >>>
-  String timeAgoSinceDate(String dateString, {bool numericDates = true}) {
+  String timeAgoSinceDate(String dateString, {bool numericDates = false}) {
+    DateTime dateUtc = DateTime.parse(dateString);
+    var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateUtc.toString(), false);
+    DateTime date = dateTime.toLocal();
+    final date2 = DateTime.now();
+    final difference = date2.difference(date);
+    if (difference.inDays >= 1) {
+      return (numericDates) ? '1d' : '${changeDateFormat(date: date, outputFormat: 'MMM dd, yyyy')}';
+    } else if (difference.inDays >= 1) {
+      return (numericDates) ? '1d' : 'Yesterday';
+    } else if (difference.inHours >= 1) {
+      return (numericDates) ? '1 h' : '${difference.inHours} hour ago';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes} min ago';
+    } else if (difference.inMinutes >= 1) {
+      return (numericDates) ? '1 min' : 'A minute ago';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds} sec';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  /// Time Ago Since Date --------- >>>
+  String newTimeAgoSince(String dateString, {bool numericDates = true}) {
     DateTime dateUtc = DateTime.parse(dateString);
     var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateUtc.toString(), true);
     DateTime date = dateTime.toLocal();

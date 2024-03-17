@@ -34,9 +34,19 @@ class Strings {
   static const codeMustBeAtLeast = "Code Must be at least 8 characters.";
   static const String mustBeAtLeast = "Must be at least 6 characters.";
 
+  static const String emailErrorMessage = "Please enter email";
+  static const String passwordErrorMessage = "Please enter password";
+
+  static const String noDataFound = "No data found";
+
   static const update = "Update";
+  static const login = "Login";
 
   static const account = "Account";
+  static const withScreen = "withScreen";
+  static const edit = "Edit";
+  static const add = "Add";
+  static const isPlus = "isPlus";
 
   static const netBalance = "Net Balance";
   static const totalIn = "Total In (+)";
@@ -50,19 +60,56 @@ class Strings {
   static const record = "Record ";
   static const income = "Income";
   static const expense = "Expense";
-  static const cashIn = "+ CASH IN";
-  static const cashOut = "+ CASH OUT";
-  static const addCashInEntry = "Add Cash In Entry";
-  static const addCashOutEntry = "Add Cash Out Entry";
+  static const cashIn = "CASH IN";
+  static const cashOut = "CASH OUT";
+  static const addCashInEntry = " Cash In Entry";
+  static const addCashOutEntry = " Cash Out Entry";
   static const editCashInEntry = "Edit Cash In Entry";
   static const generateReport = "Generate Report";
 
   static const amount = "Amount";
   static const addNewBook = "Add New Book";
+  static const editCashBook = "Edit CashBook";
   static const enterBookName = "Enter Book Name";
 
   static const suggestion = "Suggestions";
   static const salaryBook = "Salary Book";
   static const projectBook = "Project Book";
   static const clientRecord = "Client Record";
+
+  static const remark = "Remark";
+  static const remarkItemPerson = "Remark (Item, Person Name, Quantity)";
+  static const attachImageOrPdf = "Attach Image or PDF";
+
+  static const takePhotoUsingCamera = "Take photo using camera";
+  static const chooseFromGallery = "Choose from gallery";
+  static const choosePdf = "Choose PDF";
+
+  static const saveAddNew = "SAVE & ADD NEW";
+  static const save = "SAVE";
+
+  static const isGallery = "isGallery";
+  static const isPdf = "isPdf";
+
+  static const newEntryAddedToast = "New entry added on ";
+
+  static const selectReportType = "Select Report Type";
+
+  static const allEntriesRepost = "All Entries Report";
+  static const todayReport = "Today Report";
+  static const lastMonth = "Last Month Report";
+  static const lastYear = "Last Year Report";
+  static const customDate = "Custom Date";
+
+  static const listOffAllEntries = "List off all entries and details";
+  static const todayInOutBalance = "Today total in,out & balance";
+  static const lastMonthInOutBalance = "Last month in,out & balance";
+  static const lastYearInOutBalance = "Last Year in,out & balance";
+  static const customInOutBalance = "Custom date in,out & balance";
+
+  static const generateExcel = "GENERATE EXCEL";
+  static const generatePDF = "GENERATE PDF";
+
+  static const createdOn = "Created on ";
+  static const updatedOn = "Updated on ";
 }

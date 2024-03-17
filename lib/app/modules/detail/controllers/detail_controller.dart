@@ -157,7 +157,7 @@ class DetailController extends GetxController {
                             AppText(
                               isCustom.value
                                   ? index == 3
-                                      ? "${DateFormat("dd, MMM, yyy").format(selectedStartDate)} - ${DateFormat("dd, MMM, yyy").format(selectedEndDate)}"
+                                      ? "${DateFormat("dd MMM, yyy").format(selectedStartDate)} - ${DateFormat("dd MMM, yyy").format(selectedEndDate)}"
                                       : selectDateFilter[index]
                                   : selectDateFilter[index],
                               color: AppColors.darkText,
@@ -364,6 +364,7 @@ class DetailController extends GetxController {
                     20.horizontalSpace,
                   ],
                 ),
+                (MediaQuery.of(Get.context!).padding.bottom + 5).verticalSpace
               ],
             ),
           );
@@ -480,14 +481,18 @@ class DetailController extends GetxController {
                     ),
                   ),
                   20.verticalSpace,
-                  CommonButton(
-                      onTap: () {
-                        isCustom.value = true;
-                        update();
-                        Get.back();
-                      },
-                      text: "DONE"),
-                  20.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: CommonButton(
+                        padding: EdgeInsets.symmetric(vertical: 17.h),
+                        onTap: () {
+                          isCustom.value = true;
+                          update();
+                          Get.back();
+                        },
+                        text: "DONE"),
+                  ),
+                  15.verticalSpace,
                 ],
               ),
             );

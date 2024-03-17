@@ -11,6 +11,7 @@ class CommonTextField extends StatefulWidget {
   final int? maxLines;
   final bool hasError;
   final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final IconData? passwordHideIcon;
   final IconData? passwordShowIcon;
   final TextInputAction? textInputAction;
@@ -28,6 +29,7 @@ class CommonTextField extends StatefulWidget {
     this.labelText,
     this.hasError = false,
     this.prefixIcon,
+    this.suffixIcon,
     this.passwordHideIcon,
     this.passwordShowIcon,
     this.textInputAction,
@@ -59,7 +61,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
       // Set text color
       decoration: InputDecoration(
         hintText: widget.hintText,
-
+        hintStyle: AppTextStyle(textColor: AppColors.greyColor, textSize: 16.sp),
         labelStyle: TextStyle(color: widget.accentColor ?? Colors.black),
         // Set accent color
         helperText: widget.helperText,
@@ -74,7 +76,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
                 icon: Icon(_isObscure ? widget.passwordShowIcon ?? Icons.visibility : widget.passwordHideIcon ?? Icons.visibility_off),
                 color: widget.accentColor ?? theme.colorScheme.primary,
               )
-            : null,
+            : widget.suffixIcon,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -96,6 +98,79 @@ class _CommonTextFieldState extends State<CommonTextField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
+      ),
+    );
+  }
+}
+
+class CommonAppTextField extends StatelessWidget {
+  final String? title;
+  final String? hintText;
+  final String? labelText;
+  final TextEditingController? controller;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final bool? obscureText;
+  final bool? isSuffixIcon;
+  final bool enabled;
+  final bool? isPrefixIcon;
+  final TextInputType? inputType;
+  final bool? isMaxLines;
+
+  final GestureTapCallback? onTap;
+  final Color? color;
+
+  final double? height;
+  final double? borderRadius;
+  final int? maxLines;
+  final TextStyle? style;
+  TextInputType? keyboardType;
+  FocusNode? focusNode;
+
+  CommonAppTextField(
+      {Key? key,
+      this.style,
+      this.title,
+      this.hintText,
+      this.labelText,
+      required this.controller,
+      this.suffixIcon,
+      this.obscureText = false,
+      this.isSuffixIcon = false,
+      this.enabled = true,
+      this.inputType,
+      this.onTap,
+      this.isMaxLines = false,
+      this.prefixIcon,
+      this.borderRadius,
+      this.isPrefixIcon = false,
+      this.height,
+      this.color,
+      this.keyboardType,
+      this.focusNode,
+      this.maxLines})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller!,
+      obscureText: obscureText!,
+      focusNode: focusNode,
+      maxLines: isMaxLines! ? null : maxLines,
+      style: AppTextStyle(textColor: Colors.black),
+      keyboardType: keyboardType ?? TextInputType.text,
+      decoration: InputDecoration(
+        alignLabelWithHint: true,
+        enabled: enabled,
+        border: new OutlineInputBorder(borderSide: new BorderSide(color: Colors.yellowAccent)),
+        enabledBorder: new OutlineInputBorder(borderSide: new BorderSide(color: Colors.grey.withOpacity(0.6))),
+        focusedBorder: new OutlineInputBorder(borderSide: new BorderSide(color: AppColors.primary)),
+        hintText: hintText,
+        labelText: labelText,
+        labelStyle: AppTextStyle(textColor: AppColors.primary, textSize: 15.sp),
+        hintStyle: AppTextStyle(textColor: Colors.grey, textSize: 15.sp),
+        contentPadding: EdgeInsets.symmetric(vertical: 15.5.h, horizontal: 15.h),
       ),
     );
   }

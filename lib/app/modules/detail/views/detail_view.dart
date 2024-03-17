@@ -1,3 +1,4 @@
+import 'package:lottie/lottie.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 import '../../../data/all.dart';
@@ -29,13 +30,25 @@ class DetailView extends GetView<DetailController> {
                           fontSize: FontSize.s20,
                           fontFamily: FontFamily.semiBold,
                         ),
-                        20.verticalSpace,
-                        Icon(
+                        10.verticalSpace,
+                        Lottie.asset(ImagePath.imagesDownArrow,
+                            height: 70.h,
+                            width: 70.h,
+                            fit: BoxFit.cover,
+                            delegates: LottieDelegates(
+                              values: [
+                                ValueDelegate.color(
+                                  const ['**', 'wave_2 Outlines', '**'],
+                                  value: Colors.orange,
+                                ),
+                              ],
+                            )),
+                        /* Icon(
                           Icons.arrow_downward_outlined,
                           color: AppColors.primary,
                           size: 35.h,
-                        ),
-                        30.verticalSpace,
+                        ),*/
+                        20.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -67,7 +80,8 @@ class DetailView extends GetView<DetailController> {
                       Expanded(
                         child: CommonButton(
                           onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: Strings.cashIn)!.then((value) {
+                            Get.toNamed(Routes.ADD_DETAIL, arguments: {Strings.withScreen: Strings.add, Strings.isPlus: Strings.cashIn})!
+                                .then((value) {
                               Utils().appStatusBar();
                               isFirst.value = false;
                               controller.update();
@@ -76,6 +90,14 @@ class DetailView extends GetView<DetailController> {
                           text: Strings.cashIn,
                           padding: EdgeInsets.all(12.h),
                           fontSize: FontSize.s15,
+                          isLeftButton: true,
+                          leftIcon: Padding(
+                              padding: EdgeInsets.only(right: 6.w),
+                              child: Icon(
+                                Icons.add,
+                                size: 25.h,
+                                color: AppColors.whiteColor,
+                              )),
                           color: AppColors.green,
                         ),
                       ),
@@ -83,13 +105,22 @@ class DetailView extends GetView<DetailController> {
                       Expanded(
                         child: CommonButton(
                           onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: Strings.cashOut)!.then((value) {
+                            Get.toNamed(Routes.ADD_DETAIL, arguments: {Strings.withScreen: Strings.add, Strings.isPlus: Strings.cashOut})!
+                                .then((value) {
                               Utils().appStatusBar();
                               isFirst.value = false;
                               controller.update();
                             });
                           },
                           text: Strings.cashOut,
+                          isLeftButton: true,
+                          leftIcon: Padding(
+                              padding: EdgeInsets.only(right: 6.w),
+                              child: Icon(
+                                Icons.remove,
+                                size: 25.h,
+                                color: AppColors.whiteColor,
+                              )),
                           padding: EdgeInsets.all(12.h),
                           fontSize: FontSize.s15,
                           color: AppColors.red,
@@ -112,13 +143,17 @@ class DetailView extends GetView<DetailController> {
                 child: Row(
                   children: [
                     GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: const Icon(Icons.arrow_back, color: AppColors.whiteColor)),
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+                      ),
+                    ),
                     18.horizontalSpace,
                     AppText(
-                      'Ashwin',
+                      'My Book',
                       color: AppColors.whiteColor,
                       fontSize: FontSize.s18,
                       fontFamily: FontFamily.semiBold,
@@ -315,7 +350,7 @@ class DetailView extends GetView<DetailController> {
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                          ), /*
                                           15.horizontalSpace,
                                           Column(
                                             children: [
@@ -333,7 +368,7 @@ class DetailView extends GetView<DetailController> {
                                               )
                                             ],
                                           ),
-                                          5.horizontalSpace
+                                          5.horizontalSpace*/
                                         ],
                                       ),
                                     ),
@@ -466,7 +501,10 @@ class DetailView extends GetView<DetailController> {
                                                 CommonModel model = data.list![index];
                                                 return GestureDetector(
                                                   onTap: () {
-                                                    Get.toNamed(Routes.ADD_DETAIL);
+                                                    Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                                                      Strings.withScreen: Strings.edit,
+                                                      Strings.isPlus: index % 2 != 0 ? Strings.cashIn : Strings.cashOut
+                                                    });
                                                   },
                                                   child: Container(
                                                     color: AppColors.whiteColor,
@@ -497,7 +535,7 @@ class DetailView extends GetView<DetailController> {
                                                                 children: [
                                                                   AppText(
                                                                     model.price ?? "N/A",
-                                                                    color: AppColors.marron,
+                                                                    color: index % 2 == 0 ? AppColors.marron : AppColors.green,
                                                                     fontFamily: FontFamily.bold,
                                                                     fontSize: FontSize.s16,
                                                                   ),

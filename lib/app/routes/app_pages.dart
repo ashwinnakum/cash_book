@@ -8,6 +8,8 @@ import '../modules/generate_report/bindings/generate_report_binding.dart';
 import '../modules/generate_report/views/generate_report_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.GENERATE_REPORT,
       page: () => const GenerateReportView(),
       binding: GenerateReportBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
     ),
   ];
 }

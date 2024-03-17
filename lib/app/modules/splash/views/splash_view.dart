@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:lottie/lottie.dart';
+
 import '../../../data/all.dart';
 import '../controllers/splash_controller.dart';
 
@@ -13,10 +15,10 @@ class SplashView extends GetView<SplashController> {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: AppColors.transparentColor,
         statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: AppColors.primary,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarDividerColor: AppColors.primary,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: AppColors.whiteColor,
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarDividerColor: AppColors.transparentColor,
       ));
     } else {
       Utils.lightStatusBar();
@@ -28,10 +30,26 @@ class SplashView extends GetView<SplashController> {
         body: SafeArea(
           bottom: false,
           top: false,
-          child: Container(
-            color: AppColors.primary,
-            height: double.infinity,
-            width: double.infinity,
+          child: Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 50.w, right: 50.w, bottom: 50.h),
+                  child: Lottie.asset(ImagePath.imagesIcSplash),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 200.h),
+                  child: AppText(
+                    'Cash Book'.toUpperCase(),
+                    fontSize: 32.sp,
+                    letterSpacing: 1.1,
+                    fontFamily: FontFamily.bold,
+                    color: AppColors.primary,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
