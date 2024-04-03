@@ -20,9 +20,11 @@ class Constants {
   static const String home = 'home';
   static const String addUpdateBook = 'addUpdateBook';
   static const String deleteBook = 'deleteBook';
-  static const String getBooks = 'getBooks';
+  // static const String getBooks = 'getBooks';
   static const String getBookDetails = 'getBookDetails';
   static const String addCashEntry = 'addCashEntry';
   static const String updateCashEntry = 'updateCashEntry';
   static const String deleteCashEntry = 'deleteCashEntry';
+  static const String getReportFile = 'getReportFile';
+  static const String getReportPDF = 'getReportPDF';
 }

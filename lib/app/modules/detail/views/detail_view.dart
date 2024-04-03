@@ -15,134 +15,134 @@ class DetailView extends GetView<DetailController> {
       builder: (controller) {
         return CommonScreen(
           backgroundColor: AppColors.whiteColor,
-          bottomNavigationBarWidget: Visibility(
-            visible: true,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Visibility(
-                    visible: controller.bookDetailModel != null && controller.bookDetailModel!.data!.bookHistories!.isEmpty,
-                    child: Column(
-                      children: [
-                        20.verticalSpace,
-                        AppText(
-                          Strings.addYourFirstEntry,
-                          color: AppColors.darkText,
-                          fontSize: FontSize.s20,
-                          fontFamily: FontFamily.semiBold,
-                        ),
-                        10.verticalSpace,
-                        Lottie.asset(
-                          ImagePath.imagesDownArrow,
-                          height: 70.h,
-                          width: 70.h,
-                          fit: BoxFit.cover,
-                          delegates: LottieDelegates(
-                            values: [
-                              ValueDelegate.color(
-                                const ['**', 'wave_2 Outlines', '**'],
-                                value: Colors.orange,
-                              ),
-                            ],
-                          ),
-                        ),
-                        20.verticalSpace,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            AppRichText(
-                              fontSize: FontSize.s16,
-                              firstText: Strings.record,
-                              firstTextColor: AppColors.greyColor,
-                              secondText: Strings.income,
-                              secondTextFontFamily: FontFamily.semiBold,
-                              secondTextColor: AppColors.green,
-                            ),
-                            AppRichText(
-                              fontSize: FontSize.s16,
-                              firstText: Strings.record,
-                              firstTextColor: AppColors.greyColor,
-                              secondText: Strings.expense,
-                              secondTextFontFamily: FontFamily.semiBold,
-                              secondTextColor: AppColors.red,
+          bottomNavigationBarWidget: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Visibility(
+                  visible: controller.bookDetailModel != null &&
+                      controller.bookDetailModel!.data!.bookHistories!.isEmpty &&
+                      controller.isFinalSelected1.value == -1 &&
+                      controller.isFinalSelected2.value == -1,
+                  child: Column(
+                    children: [
+                      20.verticalSpace,
+                      AppText(
+                        Strings.addYourFirstEntry,
+                        color: AppColors.darkText,
+                        fontSize: FontSize.s20,
+                        fontFamily: FontFamily.semiBold,
+                      ),
+                      10.verticalSpace,
+                      Lottie.asset(
+                        ImagePath.imagesDownArrow,
+                        height: 70.h,
+                        width: 70.h,
+                        fit: BoxFit.cover,
+                        delegates: LottieDelegates(
+                          values: [
+                            ValueDelegate.color(
+                              const ['**', 'wave_2 Outlines', '**'],
+                              value: Colors.orange,
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  10.verticalSpace,
-                  Row(
-                    children: [
-                      20.horizontalSpace,
-                      Expanded(
-                        child: CommonButton(
-                          onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: {
-                              Strings.withScreen: Strings.add,
-                              Strings.isPlus: Strings.inKey,
-                              'bookId': controller.bookId,
-                            })!
-                                .then((value) {
-                              Utils().appStatusBar();
-                              controller.update();
-                              if (value is bool && value) {
-                                controller.getBookDetails();
-                              }
-                            });
-                          },
-                          text: Strings.cashIn,
-                          padding: EdgeInsets.all(12.h),
-                          fontSize: FontSize.s15,
-                          isLeftButton: true,
-                          leftIcon: Padding(
-                              padding: EdgeInsets.only(right: 6.w),
-                              child: Icon(
-                                Icons.add,
-                                size: 25.h,
-                                color: AppColors.whiteColor,
-                              )),
-                          color: AppColors.green,
-                        ),
                       ),
-                      20.horizontalSpace,
-                      Expanded(
-                        child: CommonButton(
-                          onTap: () {
-                            Get.toNamed(Routes.ADD_DETAIL, arguments: {
-                              Strings.withScreen: Strings.add,
-                              Strings.isPlus: Strings.outKey,
-                              'bookId': controller.bookId,
-                            })!
-                                .then((value) {
-                              Utils().appStatusBar();
-                              controller.update();
-                              if (value is bool && value) {
-                                controller.getBookDetails();
-                              }
-                            });
-                          },
-                          text: Strings.cashOut,
-                          isLeftButton: true,
-                          leftIcon: Padding(
-                              padding: EdgeInsets.only(right: 6.w),
-                              child: Icon(
-                                Icons.remove,
-                                size: 25.h,
-                                color: AppColors.whiteColor,
-                              )),
-                          padding: EdgeInsets.all(12.h),
-                          fontSize: FontSize.s15,
-                          color: AppColors.red,
-                        ),
+                      20.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          AppRichText(
+                            fontSize: FontSize.s16,
+                            firstText: Strings.record,
+                            firstTextColor: AppColors.greyColor,
+                            secondText: Strings.income,
+                            secondTextFontFamily: FontFamily.semiBold,
+                            secondTextColor: AppColors.green,
+                          ),
+                          AppRichText(
+                            fontSize: FontSize.s16,
+                            firstText: Strings.record,
+                            firstTextColor: AppColors.greyColor,
+                            secondText: Strings.expense,
+                            secondTextFontFamily: FontFamily.semiBold,
+                            secondTextColor: AppColors.red,
+                          ),
+                        ],
                       ),
-                      20.horizontalSpace,
                     ],
                   ),
-                  10.verticalSpace,
-                ],
-              ),
+                ),
+                10.verticalSpace,
+                Row(
+                  children: [
+                    20.horizontalSpace,
+                    Expanded(
+                      child: CommonButton(
+                        onTap: () {
+                          Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                            Strings.withScreen: Strings.add,
+                            Strings.isPlus: Strings.inKey,
+                            'bookId': controller.bookId,
+                          })!
+                              .then((value) {
+                            Utils().appStatusBar();
+                            controller.update();
+                            if (value is bool && value) {
+                              controller.getBookDetails();
+                            }
+                          });
+                        },
+                        text: Strings.cashIn,
+                        padding: EdgeInsets.all(12.h),
+                        fontSize: FontSize.s15,
+                        isLeftButton: true,
+                        leftIcon: Padding(
+                            padding: EdgeInsets.only(right: 6.w),
+                            child: Icon(
+                              Icons.add,
+                              size: 25.h,
+                              color: AppColors.whiteColor,
+                            )),
+                        color: AppColors.green,
+                      ),
+                    ),
+                    20.horizontalSpace,
+                    Expanded(
+                      child: CommonButton(
+                        onTap: () {
+                          Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                            Strings.withScreen: Strings.add,
+                            Strings.isPlus: Strings.outKey,
+                            'bookId': controller.bookId,
+                          })!
+                              .then((value) {
+                            Utils().appStatusBar();
+                            controller.update();
+                            if (value is bool && value) {
+                              controller.getBookDetails();
+                            }
+                          });
+                        },
+                        text: Strings.cashOut,
+                        isLeftButton: true,
+                        leftIcon: Padding(
+                            padding: EdgeInsets.only(right: 6.w),
+                            child: Icon(
+                              Icons.remove,
+                              size: 25.h,
+                              color: AppColors.whiteColor,
+                            )),
+                        padding: EdgeInsets.all(12.h),
+                        fontSize: FontSize.s15,
+                        color: AppColors.red,
+                      ),
+                    ),
+                    20.horizontalSpace,
+                  ],
+                ),
+                10.verticalSpace,
+              ],
             ),
           ),
           child: Column(
@@ -163,14 +163,25 @@ class DetailView extends GetView<DetailController> {
                       ),
                     ),
                     18.horizontalSpace,
-                    AppText(
-                      controller.name,
-                      color: AppColors.whiteColor,
-                      fontSize: FontSize.s18,
-                      fontFamily: FontFamily.semiBold,
+                    Expanded(
+                      child: AppText(
+                        controller.name,
+                        maxLines: 2,
+                        color: AppColors.whiteColor,
+                        fontSize: FontSize.s18,
+                        fontFamily: FontFamily.semiBold,
+                      ),
                     ),
-                    const Spacer(),
-                    SizedBox(height: 30.h, width: 30.h, child: Image.asset(ImagePath.imagesIcRedPdf)),
+                    GestureDetector(
+                      onTap: () {
+                        controller.getReportFileApi();
+                      },
+                      child: SizedBox(
+                        height: 30.h,
+                        width: 30.h,
+                        child: Image.asset(ImagePath.imagesIcRedPdf),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -293,7 +304,7 @@ class DetailView extends GetView<DetailController> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Get.toNamed(Routes.GENERATE_REPORT);
+                                        Get.toNamed(Routes.GENERATE_REPORT, arguments: controller.bookId);
                                       },
                                       child: Container(
                                         height: 45.h,
@@ -401,7 +412,7 @@ class DetailView extends GetView<DetailController> {
                                               CommonModel model = controller.filterList[index];
                                               return GestureDetector(
                                                 onTap: () {
-                                                  controller.isSelected.value = (-1);
+                                                  controller.isSelected1.value = (-1);
                                                   if (index == 0) {
                                                     controller.isCustom.value = false;
                                                     controller.selectDateSheet();
@@ -429,11 +440,11 @@ class DetailView extends GetView<DetailController> {
                                                       4.horizontalSpace,
                                                       AppText(
                                                         index == 0
-                                                            ? controller.isSelected.value != (-1)
-                                                                ? controller.selectDateFilter[controller.isSelected.value]
+                                                            ? controller.isFinalSelected1.value != (-1)
+                                                                ? controller.selectDateFilter[controller.isFinalSelected1.value]
                                                                 : model.name ?? ""
-                                                            : controller.isSelected2.value != (-1)
-                                                                ? controller.entryTypeFilter[controller.isSelected2.value]
+                                                            : controller.isFinalSelected2.value != (-1)
+                                                                ? controller.entryTypeFilter[controller.isFinalSelected2.value]
                                                                 : model.name ?? "",
                                                         fontSize: FontSize.s14,
                                                         color: AppColors.darkText,
@@ -501,131 +512,183 @@ class DetailView extends GetView<DetailController> {
                                                 ),
                                               ),
                                             )
-                                          : GroupedListView<BookHistories, String>(
-                                              padding: EdgeInsets.only(top: 5.h),
-                                              physics: NeverScrollableScrollPhysics(),
-                                              reverse: true,
-                                              shrinkWrap: true,
-                                              elements: controller.finalBookHistories,
-                                              groupBy: (bookHistories) => Utils().changeDateFormat(
-                                                  date: DateTime.parse('${bookHistories.entryDate!}' ' ${bookHistories.entryTime}'),
-                                                  outputFormat: 'yyyy-MM-dd 00:00:00'),
-                                              groupSeparatorBuilder: (String groupByValue) => Padding(
-                                                padding: EdgeInsets.only(left: 20.h, top: 12.h, bottom: 16.h),
-                                                child: AppText(
-                                                  '${Utils().changeDateFormat(date: DateTime.parse(groupByValue), outputFormat: 'dd MMM yyyy')}',
-                                                  fontFamily: FontFamily.semiBold,
-                                                  color: AppColors.greyText,
-                                                  fontSize: FontSize.s14,
-                                                ),
-                                              ),
-                                              itemBuilder: (context, element) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Get.toNamed(Routes.ADD_DETAIL, arguments: {
-                                                      Strings.withScreen: Strings.edit,
-                                                      Strings.isPlus: element.cashType,
-                                                      'bookingModel': element
-                                                    })!
-                                                        .then((value) {
-                                                      Utils().appStatusBar();
-                                                      controller.update();
-                                                      if (value is bool && value) {
-                                                        controller.getBookDetails();
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    color: AppColors.whiteColor,
-                                                    margin: EdgeInsets.only(bottom: 10.h),
-                                                    padding: EdgeInsets.symmetric(horizontal: 20.h),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        10.verticalSpace,
-                                                        Row(
-                                                          children: [
-                                                            Container(
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(8.r),
-                                                                color: AppColors.skyColor.withOpacity(0.15),
-                                                              ),
-                                                              padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 7.h),
-                                                              child: AppText(
-                                                                "Cash",
-                                                                color: AppColors.darkSky,
-                                                                fontSize: FontSize.s14,
-                                                                fontFamily: FontFamily.semiBold,
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                                children: [
-                                                                  AppText(
-                                                                    '${Utils().currencyFormatChange(amount: element.amount)}' ?? "N/A",
-                                                                    color: element.cashType == Strings.outKey ? AppColors.marron : AppColors.green,
-                                                                    fontFamily: FontFamily.bold,
-                                                                    fontSize: FontSize.s16,
-                                                                  ),
-                                                                  5.verticalSpace,
-                                                                  AppText(
-                                                                    "Balance: ${'${element.balance}' ?? "N/A"}",
-                                                                    color: AppColors.greyText,
-                                                                    fontFamily: FontFamily.medium,
-                                                                    fontSize: FontSize.s14,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        8.verticalSpace,
-                                                        AppText(
-                                                          element.remark ?? "",
-                                                          color: AppColors.darkText,
-                                                          fontSize: FontSize.s14,
-                                                          fontFamily: FontFamily.medium,
-                                                        ),
-                                                        7.verticalSpace,
-                                                        Divider(
-                                                          color: AppColors.greyColor.withOpacity(0.3),
-                                                          thickness: 0.5.h,
-                                                        ),
-                                                        7.verticalSpace,
-                                                        Row(
-                                                          children: [
-                                                            AppText(
-                                                              "${Strings.entryByYou} ",
-                                                              color: AppColors.entryTextColor,
-                                                              fontFamily: FontFamily.bold,
-                                                              fontSize: FontSize.s14,
-                                                            ),
-                                                            5.horizontalSpace,
-                                                            AppText(
-                                                              Utils().changeDateFormat(
-                                                                      date: DateTime.parse('${element.entryDate}' ' ${'${element.entryTime}'}'),
-                                                                      outputFormat: 'hh:mm:a') ??
-                                                                  "",
-                                                              color: AppColors.greyText,
-                                                              fontFamily: FontFamily.medium,
-                                                              fontSize: FontSize.s14,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        12.verticalSpace,
-                                                      ],
+                                          : Column(
+                                              children: [
+                                                GroupedListView<BookHistories, String>(
+                                                  padding: EdgeInsets.only(top: 5.h),
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  reverse: true,
+                                                  shrinkWrap: true,
+                                                  elements: controller.finalBookHistories,
+                                                  groupBy: (bookHistories) => Utils().changeDateFormat(
+                                                      date: DateTime.parse('${bookHistories.entryDate!}' ' ${bookHistories.entryTime}'),
+                                                      outputFormat: 'yyyy-MM-dd 00:00:00'),
+                                                  groupSeparatorBuilder: (String groupByValue) => Padding(
+                                                    padding: EdgeInsets.only(left: 20.h, top: 12.h, bottom: 16.h),
+                                                    child: AppText(
+                                                      '${Utils().changeDateFormat(date: DateTime.parse(groupByValue), outputFormat: 'dd MMM yyyy')}',
+                                                      fontFamily: FontFamily.semiBold,
+                                                      color: AppColors.greyText,
+                                                      fontSize: FontSize.s14,
                                                     ),
                                                   ),
-                                                );
-                                              },
+                                                  itemBuilder: (context, element) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Get.toNamed(Routes.ADD_DETAIL, arguments: {
+                                                          Strings.withScreen: Strings.edit,
+                                                          Strings.isPlus: element.cashType,
+                                                          'bookingModel': element
+                                                        })!
+                                                            .then((value) {
+                                                          Utils().appStatusBar();
+                                                          controller.update();
+                                                          if (value is bool && value) {
+                                                            controller.getBookDetails();
+                                                          }
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        color: AppColors.whiteColor,
+                                                        margin: EdgeInsets.only(bottom: 10.h),
+                                                        padding: EdgeInsets.symmetric(horizontal: 20.h),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            10.verticalSpace,
+                                                            Row(
+                                                              children: [
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(8.r),
+                                                                    color: AppColors.skyColor.withOpacity(0.15),
+                                                                  ),
+                                                                  padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 7.h),
+                                                                  child: AppText(
+                                                                    "Cash",
+                                                                    color: AppColors.darkSky,
+                                                                    fontSize: FontSize.s14,
+                                                                    fontFamily: FontFamily.semiBold,
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                    children: [
+                                                                      AppText(
+                                                                        '${Utils().currencyFormatChange(amount: element.amount)}' ?? "N/A",
+                                                                        color:
+                                                                            element.cashType == Strings.outKey ? AppColors.marron : AppColors.green,
+                                                                        fontFamily: FontFamily.bold,
+                                                                        fontSize: FontSize.s16,
+                                                                      ),
+                                                                      5.verticalSpace,
+                                                                      AppText(
+                                                                        "Balance: ${'${element.balance}' ?? "N/A"}",
+                                                                        color: AppColors.greyText,
+                                                                        fontFamily: FontFamily.medium,
+                                                                        fontSize: FontSize.s14,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            8.verticalSpace,
+                                                            AppText(
+                                                              element.remark ?? "",
+                                                              color: AppColors.darkText,
+                                                              fontSize: FontSize.s14,
+                                                              fontFamily: FontFamily.medium,
+                                                            ),
+                                                            7.verticalSpace,
+                                                            Divider(
+                                                              color: AppColors.greyColor.withOpacity(0.3),
+                                                              thickness: 0.5.h,
+                                                            ),
+                                                            7.verticalSpace,
+                                                            Row(
+                                                              children: [
+                                                                AppText(
+                                                                  "${Strings.entryByYou} ",
+                                                                  color: AppColors.entryTextColor,
+                                                                  fontFamily: FontFamily.bold,
+                                                                  fontSize: FontSize.s14,
+                                                                ),
+                                                                5.horizontalSpace,
+                                                                AppText(
+                                                                  Utils().changeDateFormat(
+                                                                          date: DateTime.parse('${element.entryDate}' ' ${'${element.entryTime}'}'),
+                                                                          outputFormat: 'hh:mm:a') ??
+                                                                      "",
+                                                                  color: AppColors.greyText,
+                                                                  fontFamily: FontFamily.medium,
+                                                                  fontSize: FontSize.s14,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            12.verticalSpace,
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                if (controller.search.text.trim().isNotEmpty && controller.finalBookHistories.length <= 10)
+                                                  (Get.height - 270).verticalSpace,
+                                              ],
                                             ),
                                     ],
                                   ),
                                 )
                               ],
                             )
-                          : SizedBox(),
+                          : controller.bookDetailModel != null &&
+                                  controller.bookDetailModel!.data!.bookHistories!.isEmpty &&
+                                  (controller.isFinalSelected1.value != -1 || controller.isFinalSelected2.value != -1)
+                              ? Padding(
+                                  padding: EdgeInsets.only(top: 150.h),
+                                  child: Column(
+                                    children: [
+                                      AppText(
+                                        Strings.noEntriesFound,
+                                        fontFamily: FontFamily.semiBold,
+                                        fontSize: 14.sp,
+                                        textAlign: TextAlign.center,
+                                        color: AppColors.darkText.withOpacity(0.7),
+                                      ),
+                                      8.verticalSpace,
+                                      GestureDetector(
+                                        onTap: () {
+                                          controller.getBookDetails(isClearFilter: true);
+                                        },
+                                        child: Container(
+                                          color: AppColors.transparentColor,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.close,
+                                                color: AppColors.primary,
+                                                size: 26.h,
+                                              ),
+                                              6.horizontalSpace,
+                                              AppText(
+                                                Strings.clearFilters,
+                                                fontFamily: FontFamily.semiBold,
+                                                fontSize: 17.sp,
+                                                letterSpacing: 1.2,
+                                                color: AppColors.primary,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
                     ],
                   ),
                 ),

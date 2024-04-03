@@ -5,7 +5,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 import '../data/all.dart';
-import 'loading.dart';
 
 class HttpUtil {
   factory HttpUtil(String token, bool isLoading, BuildContext context) => _instance(token, isLoading, context);
@@ -131,7 +130,7 @@ class HttpUtil {
         }
         return ErrorEntity(code: -7, message: "Oops something went wrong");
       default:
-        return ErrorEntity(code: -8, message: "Oops something went wrong");
+        return ErrorEntity(code: -8, message: "Your internet is not available, please try again later");
     }
   }
 

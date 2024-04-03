@@ -19,7 +19,8 @@ class LoginController extends GetxController {
       'email': email.text.trim(),
       'password': password.text.trim(),
     });
-    var data = await APIFunction().apiCall(apiName: Constants.login, context: Get.context!, params: formData);
+    var first = await APIFunction().apiCall(apiName: Constants.login, context: Get.context!, params: formData);
+    var data = await jsonDecode(first);
     if (data['ResponseCode'] == 1) {
       await GetStorageData().saveString(GetStorageData().loginModel, GetStorageData().loginModel);
       Utils().showToast(context: Get.context!, message: data['ResponseMsg']);

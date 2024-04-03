@@ -1,12 +1,17 @@
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/all.dart';
 import '../../../models/book_detail_model.dart';
 
 class DetailController extends GetxController {
   TextEditingController search = TextEditingController();
-  RxInt isSelected = (-1).obs;
+  RxInt isSelected1 = (-1).obs;
+  RxInt isFinalSelected1 = (-1).obs;
   RxInt isSelected2 = (-1).obs;
+  RxInt isFinalSelected2 = (-1).obs;
+
   RxBool isCustom = false.obs;
   int bookId = 0;
   String name = '';
@@ -53,20 +58,70 @@ class DetailController extends GetxController {
     super.onInit();
   }
 
-  getBookDetails() async {
+  getBookDetails({bool isClearFilter = false}) async {
+    String startDate = '';
+    String endDate = '';
+    if (isFinalSelected1.value != -1) {
+      if (isFinalSelected1.value != 3) {
+        endDate = Utils().changeDateFormat(date: DateTime.now(), outputFormat: 'yyyy-MM-dd');
+        startDate = Utils().changeDateFormat(
+            date: isFinalSelected1.value == 0
+                ? DateTime.now()
+                : isFinalSelected1.value == 1
+                    ? Jiffy.now().subtract(months: 1).dateTime
+                    : Jiffy.now().subtract(years: 1).dateTime,
+            outputFormat: 'yyyy-MM-dd');
+      } else if (isFinalSelected1.value == 3) {
+        startDate = Utils().changeDateFormat(date: selectedStartDate, outputFormat: 'yyyy-MM-dd');
+        endDate = Utils().changeDateFormat(date: selectedEndDate, outputFormat: 'yyyy-MM-dd');
+      }
+    }
+
     FormData formData = FormData.fromMap({
       'book_id': bookId,
+      if (isFinalSelected1.value != -1 && startDate.isNotEmpty && !isClearFilter) 'start_date': startDate,
+      if (isFinalSelected1.value != -1 && endDate.isNotEmpty && !isClearFilter) 'end_date': endDate,
+      if (isFinalSelected2.value != -1 && !isClearFilter)
+        'cash_type': isFinalSelected2.value == 0
+            ? 'all'
+            : isFinalSelected2.value == 1
+                ? 'in'
+                : 'out'
     });
     final data = await APIFunction().apiCall(apiName: Constants.getBookDetails, context: Get.context!, params: formData);
-    BookDetailModel model = BookDetailModel.fromJson(data);
+    BookDetailModel model = BookDetailModel.fromJson(jsonDecode(data));
     if (model.responseCode == 1) {
       bookDetailModel = model;
       bookHistories = model.data!.bookHistories!;
       finalBookHistories = model.data!.bookHistories!;
+      if (isClearFilter) {
+        isFinalSelected1.value = -1;
+        isSelected1.value = -1;
+        isFinalSelected2.value = -1;
+        isSelected2.value = -1;
+      }
     } else {
       Utils().showToast(message: model.responseMsg!, context: Get.context!);
     }
     update();
+  }
+
+  getReportFileApi() async {
+    FormData formData = FormData.fromMap({'book_id': bookId});
+    final first = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
+    var data = await jsonDecode(first);
+    if (data['ResponseCode'] == 1) {
+      _launchUrl(data['data']['url']);
+    } else {
+      Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
+    }
+    update();
+  }
+
+  Future<void> _launchUrl(String uri) async {
+    if (!await launchUrl(Uri.parse(uri))) {
+      throw Exception('Could not launch');
+    }
   }
 
   searchField(String value) {
@@ -125,7 +180,7 @@ class DetailController extends GetxController {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        isSelected.value = index;
+                        isSelected1.value = index;
                         if (index == 3) {
                           datePickerDialog();
                         }
@@ -133,7 +188,7 @@ class DetailController extends GetxController {
                       },
                       child: Container(
                         padding: EdgeInsets.all(10.h),
-                        color: index == isSelected.value ? AppColors.primary.withOpacity(0.2) : AppColors.whiteColor,
+                        color: index == isSelected1.value ? AppColors.primary.withOpacity(0.2) : AppColors.whiteColor,
                         child: Row(
                           children: [
                             Container(
@@ -148,7 +203,7 @@ class DetailController extends GetxController {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: index == isSelected.value ? AppColors.primary : Colors.transparent,
+                                  color: index == isSelected1.value ? AppColors.primary : Colors.transparent,
                                 ),
                               ),
                             ),
@@ -180,7 +235,11 @@ class DetailController extends GetxController {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          isSelected.value = (-1);
+                          isSelected1.value = -1;
+                          isFinalSelected1.value = -1;
+                          selectedStartDate = DateTime.now();
+                          selectedEndDate = DateTime.now();
+                          getBookDetails();
                           Get.back();
                         },
                         child: Container(
@@ -191,12 +250,12 @@ class DetailController extends GetxController {
                             children: [
                               Icon(
                                 Icons.close,
-                                color: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
+                                color: isSelected1.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                               ),
                               12.horizontalSpace,
                               AppText(
                                 "CLEAR ALL",
-                                color: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
+                                color: isSelected1.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
                                 fontFamily: FontFamily.medium,
                                 fontSize: FontSize.s14,
                               ),
@@ -208,13 +267,15 @@ class DetailController extends GetxController {
                     Expanded(
                       child: CommonButton(
                         onTap: () {
+                          isFinalSelected1.value = isSelected1.value;
+                          getBookDetails();
                           Get.back();
                           update();
                         },
                         text: "APPLY",
                         padding: EdgeInsets.symmetric(vertical: 17.h),
-                        color: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
-                        textColor: isSelected.value < 0 ? AppColors.greyColor.withOpacity(0.8) : AppColors.whiteColor,
+                        color: isSelected1.value < 0 ? AppColors.greyColor.withOpacity(0.2) : AppColors.primary,
+                        textColor: isSelected1.value < 0 ? AppColors.greyColor.withOpacity(0.8) : AppColors.whiteColor,
                       ),
                     ),
                     20.horizontalSpace,
@@ -323,7 +384,9 @@ class DetailController extends GetxController {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          isSelected2.value = (-1);
+                          isSelected2.value = -1;
+                          isFinalSelected2.value = -1;
+                          getBookDetails();
                           Get.back();
                         },
                         child: Container(
@@ -351,6 +414,8 @@ class DetailController extends GetxController {
                     Expanded(
                       child: CommonButton(
                         onTap: () {
+                          isFinalSelected2.value = isSelected2.value;
+                          getBookDetails();
                           Get.back();
                           update();
                         },
@@ -506,17 +571,23 @@ class DetailController extends GetxController {
 
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime.now());
+        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
+      printAction('is this----------------->>>>>>${selectedStartDate.difference(selectedEndDate).inMinutes}');
+      if (selectedStartDate.difference(selectedEndDate).inMinutes >= 0) {
+        selectedEndDate = selectedStartDate;
+        update();
+        printAction('selectEndDate----------------->>>>>>${selectedEndDate}');
+      }
       update();
     }
   }
 
   Future<void> selectEndDate(BuildContext context) async {
     final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime.now());
+        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;

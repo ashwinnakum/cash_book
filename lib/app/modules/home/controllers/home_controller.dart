@@ -2,6 +2,8 @@ import 'package:cash_book/app/commonWidget/common_bottom_sheet.dart';
 import 'package:cash_book/app/commonWidget/dialog.dart';
 import 'package:cash_book/app/data/all.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/home_model.dart';
 
@@ -32,6 +34,7 @@ class HomeController extends GetxController {
   ];
 
   RxInt isSelected = (-1).obs;
+  RxInt finalSelected = (-1).obs;
 
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
@@ -52,8 +55,31 @@ class HomeController extends GetxController {
   }
 
   homeApi({bool isLoading = true}) async {
-    FormData formData = FormData();
-    final data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
+    String startDate = '';
+    String endDate = '';
+    if (finalSelected.value != -1) {
+      if (finalSelected.value != 3) {
+        endDate = Utils().changeDateFormat(date: DateTime.now(), outputFormat: 'yyyy-MM-dd');
+        startDate = Utils().changeDateFormat(
+            date: finalSelected.value == 0
+                ? DateTime.now()
+                : finalSelected.value == 1
+                    ? Jiffy.now().subtract(months: 1).dateTime
+                    : Jiffy.now().subtract(years: 1).dateTime,
+            outputFormat: 'yyyy-MM-dd');
+      } else if (finalSelected.value == 3) {
+        endDate = Utils().changeDateFormat(date: selectedStartDate, outputFormat: 'yyyy-MM-dd');
+        startDate = Utils().changeDateFormat(date: selectedEndDate, outputFormat: 'yyyy-MM-dd');
+      }
+    }
+    FormData formData = FormData.fromMap(
+      ({
+        if (finalSelected.value != -1 && startDate.isNotEmpty) 'start_date': startDate,
+        if (finalSelected.value != -1 && endDate.isNotEmpty) 'end_date': endDate,
+      }),
+    );
+    final first = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
+    var data = await jsonDecode(first);
     HomeModel model = HomeModel.fromJson(data);
     if (model.responseCode == 1) {
       homeData = model.data;
@@ -71,7 +97,8 @@ class HomeController extends GetxController {
       'name': addBookNameController.text.trim(),
       if (bookId != 0) 'book_id': bookId,
     });
-    final data = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
+    final first = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
+    var data = await jsonDecode(first);
     if (data['ResponseCode'] == 1) {
       Get.back();
       if (bookId != 0) {
@@ -93,11 +120,12 @@ class HomeController extends GetxController {
     FormData formData = FormData.fromMap({
       if (bookId != 0) 'book_id': bookId,
     });
-    final data = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
+    final first = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
+    var data = await jsonDecode(first);
     Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
     if (data['ResponseCode'] == 1) {
-      homeApi();
       Get.back();
+      homeApi();
     }
   }
 
@@ -107,6 +135,7 @@ class HomeController extends GetxController {
       if (element.name!.toLowerCase().contains(value)) {
         finalBookHistories.add(element);
       }
+      if (finalBookHistories.length <= 3) {}
     });
     update();
   }
@@ -151,30 +180,39 @@ class HomeController extends GetxController {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 55.h,
-                            child: TextField(
-                              controller: addBookNameController,
-                              focusNode: searchNode,
-                              cursorColor: AppColors.primary,
-                              style: AppTextStyle(textFamily: FontFamily.medium, textSize: 16.sp, textColor: AppColors.blackColor),
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: const BorderSide(color: AppColors.primary, width: 1.3),
-                                ),
-                                labelStyle: AppTextStyle(
-                                    textFamily: FontFamily.medium,
-                                    textSize: 16.sp,
-                                    textColor: addBookNameController.text.trim().isNotEmpty ? AppColors.primary : AppColors.greyText),
-                                labelText: Strings.enterBookName,
-                                hintText: Strings.enterBookName,
-                              ),
-                              onChanged: (text) {
-                                setState(() {});
-                              },
-                            ),
+                          CommonAppTextField(
+                            controller: addBookNameController,
+                            hintText: Strings.enterBookName,
+                            labelText: Strings.enterBookName,
+                            focusNode: searchNode,
+                            onChanged: (p0) {
+                              setState(() {});
+                            },
                           ),
+                          // Container(
+                          //   height: 55.h,
+                          //   child: TextField(
+                          //     controller: addBookNameController,
+                          //     focusNode: searchNode,
+                          //     cursorColor: AppColors.primary,
+                          //     style: AppTextStyle(textFamily: FontFamily.medium, textSize: 16.sp, textColor: AppColors.blackColor),
+                          //     decoration: InputDecoration(
+                          //       border: OutlineInputBorder(),
+                          //       focusedBorder: const OutlineInputBorder(
+                          //         borderSide: const BorderSide(color: AppColors.primary, width: 1.3),
+                          //       ),
+                          //       labelStyle: AppTextStyle(
+                          //           textFamily: FontFamily.medium,
+                          //           textSize: 16.sp,
+                          //           textColor: addBookNameController.text.trim().isNotEmpty ? AppColors.primary : AppColors.greyText),
+                          //       labelText: Strings.enterBookName,
+                          //       hintText: Strings.enterBookName,
+                          //     ),
+                          //     onChanged: (text) {
+                          //       setState(() {});
+                          //     },
+                          //   ),
+                          // ),
                           Visibility(
                             visible: bookId == 0,
                             child: Column(
@@ -246,6 +284,25 @@ class HomeController extends GetxController {
     });
     await Future.delayed(Duration(milliseconds: 100));
     FocusScope.of(Get.context!).requestFocus(searchNode);
+  }
+
+  getReportFileApi() async {
+    printAction('----------------->>>>>>report pdf file');
+    FormData formData = FormData.fromMap({});
+    final first = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
+    var data = await jsonDecode(first);
+    if (data['ResponseCode'] == 1) {
+      _launchUrl(data['data']['url']);
+    } else {
+      Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
+    }
+    update();
+  }
+
+  Future<void> _launchUrl(String uri) async {
+    if (!await launchUrl(Uri.parse(uri))) {
+      throw Exception('Could not launch');
+    }
   }
 
   selectDateSheet() {
@@ -349,7 +406,12 @@ class HomeController extends GetxController {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          isSelected.value = (-1);
+                          isSelected.value = -1;
+                          finalSelected.value = isSelected.value;
+                          selectedStartDate = DateTime.now();
+                          selectedEndDate = DateTime.now();
+                          update();
+                          homeApi();
                           Get.back();
                         },
                         child: Container(
@@ -377,6 +439,8 @@ class HomeController extends GetxController {
                     Expanded(
                       child: CommonButton(
                         onTap: () {
+                          finalSelected.value = isSelected.value;
+                          homeApi();
                           Get.back();
                           update();
                         },
@@ -529,17 +593,23 @@ class HomeController extends GetxController {
 
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime.now());
+        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
+      printAction('is this----------------->>>>>>${selectedStartDate.difference(selectedEndDate).inMinutes}');
+      if (selectedStartDate.difference(selectedEndDate).inMinutes >= 0) {
+        selectedEndDate = selectedStartDate;
+        update();
+        printAction('selectEndDate----------------->>>>>>${selectedEndDate}');
+      }
       update();
     }
   }
 
   Future<void> selectEndDate(BuildContext context) async {
     final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime.now());
+        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;

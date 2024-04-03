@@ -129,7 +129,10 @@ class GenerateReportView extends GetView<GenerateReportController> {
                   padding: EdgeInsets.symmetric(horizontal: FontSize.defaultPadding),
                   child: CommonButton(
                     onTap: () {
-                      Get.back();
+                      controller.isPDf.value = false;
+                      controller.update();
+                      controller.validation();
+                      // Get.back();
                     },
                     text: Strings.generateExcel,
                     padding: EdgeInsets.symmetric(vertical: 16.5.h),
@@ -149,8 +152,23 @@ class GenerateReportView extends GetView<GenerateReportController> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: FontSize.defaultPadding),
                   child: CommonButton(
-                    onTap: () {
-                      Get.back();
+                    onTap: () async {
+                      controller.isPDf.value = true;
+                      controller.validation();
+                      // await launchUrl(Uri.parse('https://jmp.sh/s/ndcvnkaFKUcpscxWSbub'));
+                      /*controller.permissionReady = await controller.checkPermission();
+                      printAction('controller.permissionReady----------------->>>>>>${controller.permissionReady}');
+                      if (controller.permissionReady) {
+                        await controller.prepareSaveDir();
+                        print("Downloading");
+                        try {
+                          await Dio().download("https:\/\/ds-staging.000webhostapp.com\/money_book\/public\/excel-report.csv", controller.localPath);
+                          print("Download Completed.");
+                        } catch (e) {
+                          print("Download Failed.\n\n" + e.toString());
+                        }
+                      }*/
+                      // Get.back();
                     },
                     text: Strings.generatePDF,
                     isLeftButton: true,

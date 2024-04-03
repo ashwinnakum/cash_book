@@ -15,6 +15,7 @@ class ImagePath {
   static const String imagesIcBack = 'assets/images/ic_back.png';
   static const String imagesIcBlankPdf = 'assets/images/ic_blank_pdf.png';
   static const String imagesIcBluePdf = 'assets/images/ic_blue_pdf.png';
+  static const String imagesIcBook = 'assets/images/ic_book.png';
   static const String imagesIcBusiness = 'assets/images/ic_business.svg';
   static const String imagesIcColorPdf = 'assets/images/ic_color_pdf.png';
   static const String imagesIcDarkSearch = 'assets/images/ic_dark_search.png';
@@ -26,5 +27,6 @@ class ImagePath {
   static const String imagesIcRedPdf = 'assets/images/ic_red_pdf.png';
   static const String imagesIcSearch = 'assets/images/ic_search.png';
   static const String imagesIcSplash = 'assets/images/ic_splash.json';
+  static const String imagesIconPdf = 'assets/images/icon_pdf.svg';
   static const String imagesMyBook = 'assets/images/my_book.png';
 }

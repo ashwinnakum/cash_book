@@ -66,14 +66,17 @@ class BookHistories {
   String? updatedAt;
   String? createdAt;
   BookHistoryData? bookHistory;
+  int? netBalance;
 
-  BookHistories({this.bookId, this.name, this.updatedAt, this.bookHistory});
+  BookHistories({this.bookId, this.name, this.updatedAt, this.bookHistory, this.netBalance});
 
   BookHistories.fromJson(Map<String, dynamic> json) {
     bookId = json['book_id'];
     name = json['name'];
     updatedAt = json['updated_at'];
     createdAt = json['created_at'];
+    netBalance = json['net_balance'];
+
     bookHistory = json['book_history'] != null ? new BookHistoryData.fromJson(json['book_history']) : null;
   }
 
@@ -83,6 +86,8 @@ class BookHistories {
     data['name'] = this.name;
     data['updated_at'] = this.updatedAt;
     data['created_at'] = this.createdAt;
+    data['net_balance'] = this.netBalance;
+
     if (this.bookHistory != null) {
       data['book_history'] = this.bookHistory!.toJson();
     }

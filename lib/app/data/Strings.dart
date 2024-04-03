@@ -56,6 +56,8 @@ class Strings {
   static const totalOut = "Total Out (-)";
 
   static const viewReports = "VIEW REPORTS";
+  static const clearFilters = "CLEAR FILTERS";
+  static const noEntriesFound = "No entries found for above filters!";
   static const searchCustomer = "Search Customer";
 
   static const addYourFirstEntry = "Add your first entry";

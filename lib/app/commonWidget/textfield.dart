@@ -151,7 +151,7 @@ class CommonAppTextField extends StatelessWidget {
       this.keyboardType,
       this.focusNode,
       this.onChanged,
-      this.maxLines})
+      this.maxLines = 1})
       : super(key: key);
 
   @override
