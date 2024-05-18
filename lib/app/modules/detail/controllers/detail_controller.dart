@@ -18,6 +18,7 @@ class DetailController extends GetxController {
   BookDetailModel? bookDetailModel;
   List<BookHistories> bookHistories = [];
   List<BookHistories> finalBookHistories = [];
+  var selectMode = false;
 
   // RxString noDataFound = ''.obs;
 

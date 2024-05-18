@@ -619,7 +619,7 @@ class DetailView extends GetView<DetailController> {
                                                                 AppText(
                                                                   Utils().changeDateFormat(
                                                                           date: DateTime.parse('${element.entryDate}' ' ${'${element.entryTime}'}'),
-                                                                          outputFormat: 'hh:mm:a') ??
+                                                                          outputFormat: 'dd MMM yyyy, hh:mm:a') ??
                                                                       "",
                                                                   color: AppColors.greyText,
                                                                   fontFamily: FontFamily.medium,

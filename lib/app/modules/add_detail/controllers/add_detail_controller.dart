@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cash_book/app/data/all.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../commonWidget/common_bottom_sheet.dart';
 import '../../../models/book_detail_model.dart';
@@ -344,5 +349,41 @@ class AddDetailController extends GetxController {
     ))!;
 
     update();
+  }
+
+  imageShowDialog(int index, bool isNetwork) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+      child: Dialog(
+        insetPadding: EdgeInsets.symmetric(vertical: 100.h, horizontal: FontSize.defaultPadding),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5.r),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: isNetwork
+                ? CachedNetworkImage(
+                    imageUrl: fileList[index].name!,
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    progressIndicatorBuilder: (context, url, progress) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.withOpacity(0.2),
+                        highlightColor: Colors.white.withOpacity(0.2),
+                        enabled: true,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  )
+                : Image.file(
+                    File(fileList[index].name!),
+                    fit: BoxFit.fill,
+                  ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -331,7 +331,7 @@ class HomeView extends GetView<HomeController> {
                                         return GestureDetector(
                                           onTap: () {
                                             Get.toNamed(Routes.DETAIL, arguments: {'bookId': element.bookId, 'name': element.name})?.then((value) {
-                                              controller.homeApi(isLoading: false);
+                                              controller.homeApi(isLoading: false, textFieldClear: true);
                                             });
                                           },
                                           child: Container(
@@ -373,8 +373,8 @@ class HomeView extends GetView<HomeController> {
                                                       ),
                                                     ),
                                                     AppText(
-                                                      element.bookHistory == null ? '00' : Utils().currencyFormatChange(amount: element.netBalance),
-                                                      color: element.bookHistory == null
+                                                      element.netBalance == null ? '00' : Utils().currencyFormatChange(amount: element.netBalance),
+                                                      color: element.netBalance == null
                                                           ? AppColors.green
                                                           : element.netBalance! <= 0
                                                               ? AppColors.appRedColor

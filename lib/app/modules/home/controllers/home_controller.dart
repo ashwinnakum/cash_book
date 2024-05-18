@@ -54,7 +54,7 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  homeApi({bool isLoading = true}) async {
+  homeApi({bool isLoading = true, bool textFieldClear = false}) async {
     String startDate = '';
     String endDate = '';
     if (finalSelected.value != -1) {
@@ -85,6 +85,9 @@ class HomeController extends GetxController {
       homeData = model.data;
       bookHistories = model.data!.bookHistories!;
       finalBookHistories = model.data!.bookHistories!;
+      if (textFieldClear) {
+        searchField(search.text);
+      }
       if (finalBookHistories.isEmpty) {
         noDataFound.value = Strings.noDataFound;
       }

@@ -29,6 +29,8 @@ class AddDetailView extends GetView<AddDetailController> {
                       children: [
                         GestureDetector(
                             onTap: () {
+                              Utils().hideKeyboard();
+
                               Get.back(result: controller.cnt != 0);
                             },
                             child: const Icon(Icons.arrow_back, color: AppColors.whiteColor)),
@@ -173,6 +175,8 @@ class AddDetailView extends GetView<AddDetailController> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
+                                          Utils().hideKeyboard();
+
                                           controller.pickerSheet();
                                         },
                                         child: Container(
@@ -206,13 +210,21 @@ class AddDetailView extends GetView<AddDetailController> {
                                 child: ListView.builder(
                                   itemCount: controller.fileList.length + (controller.fileList.isNotEmpty ? 1 : 0),
                                   scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
+                                  itemBuilder: (newContext, index) {
                                     return Stack(
                                       children: [
                                         GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
+                                            Utils().hideKeyboard();
+
                                             if (index == controller.fileList.length) {
                                               controller.pickerSheet();
+                                            } else if (controller.fileList[index].type != Strings.isPdf) {
+                                              await showDialog(
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return controller.imageShowDialog(index, controller.fileList[index].isNetwork!.value);
+                                                  });
                                             }
                                           },
                                           child: Container(

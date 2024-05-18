@@ -74,20 +74,21 @@ class BookHistories {
   String? entryTime;
   String? createdAt;
   String? updatedAt;
+  bool? isSelect;
   List<Attaches>? attaches;
 
-  BookHistories(
-      {this.bhId,
-      this.bookId,
-      this.cashType,
-      this.amount,
-      this.balance,
-      this.remark,
-      this.entryDate,
-      this.entryTime,
-      this.createdAt,
-      this.updatedAt,
-      this.attaches});
+  BookHistories({this.bhId,
+    this.bookId,
+    this.cashType,
+    this.amount,
+    this.balance,
+    this.remark,
+    this.entryDate,
+    this.entryTime,
+    this.createdAt,
+    this.updatedAt,
+    this.isSelect = false,
+    this.attaches});
 
   BookHistories.fromJson(Map<String, dynamic> json) {
     bhId = json['bh_id'];
@@ -100,6 +101,7 @@ class BookHistories {
     entryTime = json['entry_time'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    isSelect = false;
     if (json['attaches'] != null) {
       attaches = <Attaches>[];
       json['attaches'].forEach((v) {
@@ -120,6 +122,7 @@ class BookHistories {
     data['entry_time'] = this.entryTime;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['isSelect'] = this.isSelect;
     if (this.attaches != null) {
       data['attaches'] = this.attaches!.map((v) => v.toJson()).toList();
     }

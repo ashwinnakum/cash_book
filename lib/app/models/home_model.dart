@@ -65,10 +65,9 @@ class BookHistories {
   String? name;
   String? updatedAt;
   String? createdAt;
-  BookHistoryData? bookHistory;
   int? netBalance;
 
-  BookHistories({this.bookId, this.name, this.updatedAt, this.bookHistory, this.netBalance});
+  BookHistories({this.bookId, this.name, this.updatedAt, this.netBalance});
 
   BookHistories.fromJson(Map<String, dynamic> json) {
     bookId = json['book_id'];
@@ -76,8 +75,6 @@ class BookHistories {
     updatedAt = json['updated_at'];
     createdAt = json['created_at'];
     netBalance = json['net_balance'];
-
-    bookHistory = json['book_history'] != null ? new BookHistoryData.fromJson(json['book_history']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -87,10 +84,6 @@ class BookHistories {
     data['updated_at'] = this.updatedAt;
     data['created_at'] = this.createdAt;
     data['net_balance'] = this.netBalance;
-
-    if (this.bookHistory != null) {
-      data['book_history'] = this.bookHistory!.toJson();
-    }
     return data;
   }
 }
