@@ -89,8 +89,8 @@ class DetailController extends GetxController {
                 ? 'in'
                 : 'out'
     });
-    final data = await APIFunction().apiCall(apiName: Constants.getBookDetails, context: Get.context!, params: formData);
-    BookDetailModel model = BookDetailModel.fromJson(jsonDecode(data));
+    var data = await APIFunction().apiCall(apiName: Constants.getBookDetails, context: Get.context!, params: formData);
+    BookDetailModel model = BookDetailModel.fromJson(data);
     if (model.responseCode == 1) {
       bookDetailModel = model;
       bookHistories = model.data!.bookHistories!;
@@ -109,8 +109,8 @@ class DetailController extends GetxController {
 
   getReportFileApi() async {
     FormData formData = FormData.fromMap({'book_id': bookId});
-    final first = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
+
     if (data['ResponseCode'] == 1) {
       _launchUrl(data['data']['url']);
     } else {

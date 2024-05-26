@@ -1,6 +1,3 @@
-/*
-RxBool isFirst = true.obs;*/
-
 class Constants {
   static const String apiKey = 'jExwb7PralnoOTGSd42SDFSgO0xczgrGedQvpLwo4W';
   static const emailRegX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
@@ -12,7 +9,9 @@ class Constants {
   static const String YYYY_MM_DD_HH_MM_SS_24 = 'yyyy-MM-dd HH:mm:ss';
 
 //todo ------ base url ---------//
-  static const String baseUrl = 'https://ds-staging.000webhostapp.com/money_book/api/';
+//   static const String baseUrl = 'https://ds-staging.000webhostapp.com/money_book/api/';
+//   static const String baseUrl = 'https://cashbookapp.flomiz.com/';
+  static const String baseUrl = 'http://205.209.108.170:90/money_book/api/';
   static String versionName = '';
 
 //todo ------ api collection ---------//

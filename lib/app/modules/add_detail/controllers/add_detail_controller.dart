@@ -92,8 +92,8 @@ class AddDetailController extends GetxController {
     for (int i = 0; i < fileList.length; i++) {
       formData.files.addAll([MapEntry("file[]", await MultipartFile.fromFile(fileList[i].name!, filename: fileList[i].name!.split('/').last))]);
     }
-    var first = await APIFunction().apiCall(apiName: Constants.addCashEntry, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.addCashEntry, context: Get.context!, params: formData);
+
     if (data['ResponseCode'] == 1) {
       if (isNew.value) {
         amountController.text = '';
@@ -130,8 +130,7 @@ class AddDetailController extends GetxController {
       }
     }
 
-    var first = await APIFunction().apiCall(apiName: Constants.updateCashEntry, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.updateCashEntry, context: Get.context!, params: formData);
 
     if (data['ResponseCode'] == 1) {
       if (isNew.value) {
@@ -153,8 +152,8 @@ class AddDetailController extends GetxController {
     FormData formData = FormData.fromMap({
       'bh_id': bookHistories!.bhId!,
     });
-    var first = await APIFunction().apiCall(apiName: Constants.deleteCashEntry, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.deleteCashEntry, context: Get.context!, params: formData);
+
     if (data['ResponseCode'] == 1) {
       Get.back(result: true);
       Utils().showToast(message: data['ResponseMsg'], context: Get.context!);

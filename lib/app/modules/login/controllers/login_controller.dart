@@ -1,8 +1,8 @@
 import 'package:cash_book/app/data/all.dart';
 
 class LoginController extends GetxController {
-  TextEditingController email = TextEditingController(text: 'admin@cachbook.com');
-  TextEditingController password = TextEditingController(text: '123@admin');
+  TextEditingController email = TextEditingController(/*text: 'admin@cachbook.com'*/);
+  TextEditingController password = TextEditingController(/*text: '123@admin'*/);
 
   validation() {
     if (Utils().isValidationEmpty(email.text.trim())) {
@@ -19,8 +19,8 @@ class LoginController extends GetxController {
       'email': email.text.trim(),
       'password': password.text.trim(),
     });
-    var first = await APIFunction().apiCall(apiName: Constants.login, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.login, context: Get.context!, params: formData);
+
     if (data['ResponseCode'] == 1) {
       await GetStorageData().saveString(GetStorageData().loginModel, GetStorageData().loginModel);
       Utils().showToast(context: Get.context!, message: data['ResponseMsg']);

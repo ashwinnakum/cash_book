@@ -78,9 +78,9 @@ class GenerateReportController extends GetxController {
       if (select != null && startDate.isNotEmpty) 'start_date': startDate,
       if (select != null && endDate.isNotEmpty) 'end_date': endDate,
     });
-    final first =
+    final data =
         await APIFunction().apiCall(apiName: isPDf.value ? Constants.getReportPDF : Constants.getReportFile, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+
     if (data['ResponseCode'] == 1) {
       _launchUrl(data['data']['url']);
     } else {

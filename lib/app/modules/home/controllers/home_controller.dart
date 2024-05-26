@@ -78,8 +78,8 @@ class HomeController extends GetxController {
         if (finalSelected.value != -1 && endDate.isNotEmpty) 'end_date': endDate,
       }),
     );
-    final first = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
+
     HomeModel model = HomeModel.fromJson(data);
     if (model.responseCode == 1) {
       homeData = model.data;
@@ -100,8 +100,7 @@ class HomeController extends GetxController {
       'name': addBookNameController.text.trim(),
       if (bookId != 0) 'book_id': bookId,
     });
-    final first = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
     if (data['ResponseCode'] == 1) {
       Get.back();
       if (bookId != 0) {
@@ -123,8 +122,8 @@ class HomeController extends GetxController {
     FormData formData = FormData.fromMap({
       if (bookId != 0) 'book_id': bookId,
     });
-    final first = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
+
     Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
     if (data['ResponseCode'] == 1) {
       Get.back();
@@ -292,8 +291,8 @@ class HomeController extends GetxController {
   getReportFileApi() async {
     printAction('----------------->>>>>>report pdf file');
     FormData formData = FormData.fromMap({});
-    final first = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
-    var data = await jsonDecode(first);
+    var data = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
+
     if (data['ResponseCode'] == 1) {
       _launchUrl(data['data']['url']);
     } else {
