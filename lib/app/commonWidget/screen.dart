@@ -12,7 +12,7 @@ class CommonScreen extends StatelessWidget {
     this.bottomNavigationBarWidget,
     this.child,
     this.backgroundColor,
-    this.resizeToAvoidBottomInset = false,
+    this.resizeToAvoidBottomInset = true,
     this.floatingActionButton = const SizedBox(),
   });
 

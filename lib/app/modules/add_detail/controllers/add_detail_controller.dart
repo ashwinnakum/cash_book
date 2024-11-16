@@ -88,6 +88,7 @@ class AddDetailController extends GetxController {
       'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
       'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
       'remark': remark.text.trim(),
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
     });
     for (int i = 0; i < fileList.length; i++) {
       formData.files.addAll([MapEntry("file[]", await MultipartFile.fromFile(fileList[i].name!, filename: fileList[i].name!.split('/').last))]);
@@ -122,7 +123,8 @@ class AddDetailController extends GetxController {
       'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
       'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
       'remark': remark.text.trim(),
-      if (removeList.isNotEmpty) 'remove_media_ids': removeList.join(',')
+      if (removeList.isNotEmpty) 'remove_media_ids': removeList.join(','),
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
     });
     for (int i = 0; i < fileList.length; i++) {
       if (!fileList[i].isNetwork!.value) {
@@ -151,10 +153,12 @@ class AddDetailController extends GetxController {
   deleteCashEntryApi() async {
     FormData formData = FormData.fromMap({
       'bh_id': bookHistories!.bhId!,
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
     });
     var data = await APIFunction().apiCall(apiName: Constants.deleteCashEntry, context: Get.context!, params: formData);
 
     if (data['ResponseCode'] == 1) {
+      Get.back();
       Get.back(result: true);
       Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
     } else {}

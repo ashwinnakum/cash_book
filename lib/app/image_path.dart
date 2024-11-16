@@ -29,4 +29,5 @@ class ImagePath {
   static const String imagesIcSplash = 'assets/images/ic_splash.json';
   static const String imagesIconPdf = 'assets/images/icon_pdf.svg';
   static const String imagesMyBook = 'assets/images/my_book.png';
+  static const String imagesLogOut = 'assets/images/logout.png';
 }

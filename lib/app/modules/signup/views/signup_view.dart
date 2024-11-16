@@ -1,8 +1,8 @@
 import '../../../data/all.dart';
-import '../controllers/login_controller.dart';
+import '../controllers/signup_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  const LoginView({Key? key}) : super(key: key);
+class SignupView extends GetView<SignupController> {
+  const SignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +13,10 @@ class LoginView extends GetView<LoginController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppRichText(
-              firstText: Strings.donTHaveAnAccount,
-              secondText: Strings.signUp,
+              firstText: Strings.alreadyHaveAnAccount,
+              secondText: Strings.signIn,
               onTap: () {
-                Get.offAndToNamed(Routes.SIGNUP);
+                Get.offAndToNamed(Routes.LOGIN);
               },
             ),
             MediaQuery.paddingOf(context).bottom.verticalSpace
@@ -62,14 +62,14 @@ class LoginView extends GetView<LoginController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AppText(
-                                  Strings.signIn,
+                                  Strings.signUp,
                                   color: AppColors.darkText,
                                   fontSize: 30.sp,
                                   fontFamily: FontFamily.medium,
                                 ),
                                 10.verticalSpace,
                                 AppText(
-                                  Strings.pleaseSign,
+                                  Strings.pleaseUp,
                                   color: AppColors.greyText,
                                   fontSize: 16.sp,
                                   fontFamily: FontFamily.medium,
@@ -78,6 +78,7 @@ class LoginView extends GetView<LoginController> {
                                 CommonTextField(
                                   controller: controller.phoneNo,
                                   hintText: Strings.mobileNumber,
+                                  keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.next,
                                 ),
                                 20.verticalSpace,
@@ -85,34 +86,21 @@ class LoginView extends GetView<LoginController> {
                                   controller: controller.password,
                                   hintText: Strings.password,
                                   textInputAction: TextInputAction.done,
-                                  onEditingComplete: () {
-                                    controller.validation();
-                                  },
+                                  onEditingComplete: () {},
                                 ),
                                 20.verticalSpace,
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      controller.phoneNo.clear();
-                                      controller.password.clear();
-                                      Get.toNamed(Routes.FORGOT_PASSWORD);
-                                    },
-                                    child: AppText(
-                                      Strings.forgotPasswordD,
-                                      color: AppColors.primary,
-                                      textAlign: TextAlign.right,
-                                      fontSize: 16.sp,
-                                      fontFamily: FontFamily.medium,
-                                    ),
-                                  ),
+                                CommonTextField(
+                                  controller: controller.confirmPassword,
+                                  hintText: Strings.confirmPassword,
+                                  textInputAction: TextInputAction.done,
+                                  onEditingComplete: () {},
                                 ),
                                 30.verticalSpace,
                                 CommonButton(
                                     onTap: () {
                                       controller.validation();
                                     },
-                                    text: Strings.signIn.toUpperCase())
+                                    text: Strings.signUp.toUpperCase())
                               ],
                             ),
                           ),

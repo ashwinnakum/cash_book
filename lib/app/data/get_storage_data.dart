@@ -4,7 +4,6 @@ import 'all.dart';
 
 /// <<< To store data in phone storage --------- >>>
 class GetStorageData {
-  String loginModel = "loginModel";
   String userId = "userId";
   String uid = "uid";
   String token = "token";
@@ -55,8 +54,6 @@ class GetStorageData {
 
   removeAllData() {
     final box = GetStorage();
-    box.remove(GetStorageData().loginModel);
     box.remove(GetStorageData().userId);
-    box.remove(GetStorageData().uid);
   }
 }

@@ -11,7 +11,8 @@ class Constants {
 //todo ------ base url ---------//
 //   static const String baseUrl = 'https://ds-staging.000webhostapp.com/money_book/api/';
 //   static const String baseUrl = 'https://cashbookapp.flomiz.com/';
-  static const String baseUrl = 'http://205.209.108.170:90/money_book/api/';
+//   static const String baseUrl = 'http://205.209.108.170:90/money_book/api/';
+  static const String baseUrl = 'https://59df-2406-b400-d11-c6bd-28e2-5ca2-888c-8466.ngrok-free.app/api/';
   static String versionName = '';
 
 //todo ------ api collection ---------//
@@ -19,11 +20,15 @@ class Constants {
   static const String home = 'home';
   static const String addUpdateBook = 'addUpdateBook';
   static const String deleteBook = 'deleteBook';
-  // static const String getBooks = 'getBooks';
+
+  // static const String ¸¸¸ = 'getBooks';
   static const String getBookDetails = 'getBookDetails';
   static const String addCashEntry = 'addCashEntry';
   static const String updateCashEntry = 'updateCashEntry';
   static const String deleteCashEntry = 'deleteCashEntry';
   static const String getReportFile = 'getReportFile';
   static const String getReportPDF = 'getReportPDF';
+  static const String forgotPassword = 'forgotPassword';
+  static const String updatePassword = 'updatePassword';
+  static const String signUp = 'signUp';
 }

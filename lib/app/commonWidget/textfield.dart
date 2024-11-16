@@ -6,6 +6,7 @@ class CommonTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final Function(String)? onChanged;
+  final Function()? onEditingComplete;
   final String? helperText;
   final String? labelText;
   final int? maxLines;
@@ -17,14 +18,16 @@ class CommonTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final Color? textColor;
   final Color? accentColor;
+  List<TextInputFormatter>? inputFormatters;
 
-  const CommonTextField({
+  CommonTextField({
     Key? key,
     required this.controller,
     this.hintText,
     this.keyboardType,
     this.obscureText = false,
     this.onChanged,
+    this.onEditingComplete,
     this.helperText,
     this.labelText,
     this.hasError = false,
@@ -36,6 +39,7 @@ class CommonTextField extends StatefulWidget {
     this.textColor,
     this.maxLines = 1,
     this.accentColor,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -54,18 +58,23 @@ class _CommonTextFieldState extends State<CommonTextField> {
       keyboardType: widget.keyboardType,
       obscureText: _isObscure,
       onChanged: widget.onChanged,
+      onEditingComplete: widget.onEditingComplete,
       textInputAction: widget.textInputAction,
       maxLines: !_isObscure ? widget.maxLines : 1,
       cursorColor: AppColors.primary,
+      inputFormatters: widget.inputFormatters ?? [],
       style: TextStyle(color: widget.textColor ?? Colors.black),
       // Set text color
+
       decoration: InputDecoration(
         hintText: widget.hintText,
+
         hintStyle: AppTextStyle(textColor: AppColors.greyColor, textSize: 16.sp),
         labelStyle: TextStyle(color: widget.accentColor ?? Colors.black),
         // Set accent color
         helperText: widget.helperText,
         prefixIcon: widget.prefixIcon,
+
         suffixIcon: widget.obscureText
             ? IconButton(
                 onPressed: () {
@@ -128,31 +137,33 @@ class CommonAppTextField extends StatelessWidget {
   FocusNode? focusNode;
 
   final Function(String)? onChanged;
+  List<TextInputFormatter>? inputFormatters;
 
-  CommonAppTextField(
-      {Key? key,
-      this.style,
-      this.title,
-      this.hintText,
-      this.labelText,
-      required this.controller,
-      this.suffixIcon,
-      this.obscureText = false,
-      this.isSuffixIcon = false,
-      this.enabled = true,
-      this.inputType,
-      this.onTap,
-      this.isMaxLines = false,
-      this.prefixIcon,
-      this.borderRadius,
-      this.isPrefixIcon = false,
-      this.height,
-      this.color,
-      this.keyboardType,
-      this.focusNode,
-      this.onChanged,
-      this.maxLines = 1})
-      : super(key: key);
+  CommonAppTextField({
+    Key? key,
+    this.style,
+    this.title,
+    this.hintText,
+    this.labelText,
+    required this.controller,
+    this.suffixIcon,
+    this.obscureText = false,
+    this.isSuffixIcon = false,
+    this.enabled = true,
+    this.inputType,
+    this.onTap,
+    this.isMaxLines = false,
+    this.prefixIcon,
+    this.borderRadius,
+    this.isPrefixIcon = false,
+    this.height,
+    this.color,
+    this.keyboardType,
+    this.focusNode,
+    this.onChanged,
+    this.maxLines = 1,
+    this.inputFormatters,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +175,7 @@ class CommonAppTextField extends StatelessWidget {
       style: AppTextStyle(textColor: Colors.black),
       keyboardType: keyboardType ?? TextInputType.text,
       onChanged: onChanged,
+      inputFormatters: inputFormatters ?? [],
       decoration: InputDecoration(
         alignLabelWithHint: true,
         enabled: enabled,

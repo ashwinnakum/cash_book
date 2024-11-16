@@ -170,7 +170,7 @@ class Utils {
       gravity: ToastGravity.BOTTOM,
       toastLength: Toast.LENGTH_SHORT,
       textColor: Colors.white,
-      backgroundColor: Colors.white.withOpacity(0),
+      backgroundColor: Colors.grey,
     );
   }
 

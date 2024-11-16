@@ -87,7 +87,8 @@ class DetailController extends GetxController {
             ? 'all'
             : isFinalSelected2.value == 1
                 ? 'in'
-                : 'out'
+                : 'out',
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
     });
     var data = await APIFunction().apiCall(apiName: Constants.getBookDetails, context: Get.context!, params: formData);
     BookDetailModel model = BookDetailModel.fromJson(data);
@@ -108,7 +109,10 @@ class DetailController extends GetxController {
   }
 
   getReportFileApi() async {
-    FormData formData = FormData.fromMap({'book_id': bookId});
+    FormData formData = FormData.fromMap({
+      'book_id': bookId,
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
+    });
     var data = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
 
     if (data['ResponseCode'] == 1) {
@@ -571,8 +575,7 @@ class DetailController extends GetxController {
   DateTime selectedEndDate = DateTime.now();
 
   Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
@@ -587,8 +590,7 @@ class DetailController extends GetxController {
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;

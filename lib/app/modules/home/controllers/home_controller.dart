@@ -76,6 +76,7 @@ class HomeController extends GetxController {
       ({
         if (finalSelected.value != -1 && startDate.isNotEmpty) 'start_date': startDate,
         if (finalSelected.value != -1 && endDate.isNotEmpty) 'end_date': endDate,
+        'user_id': await GetStorageData().readString(GetStorageData().userId)
       }),
     );
     var data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
@@ -96,10 +97,8 @@ class HomeController extends GetxController {
   }
 
   addUpdateBookApi({int bookId = 0}) async {
-    FormData formData = FormData.fromMap({
-      'name': addBookNameController.text.trim(),
-      if (bookId != 0) 'book_id': bookId,
-    });
+    FormData formData = FormData.fromMap(
+        {'name': addBookNameController.text.trim(), if (bookId != 0) 'book_id': bookId, 'user_id': await GetStorageData().readString(GetStorageData().userId)});
     var data = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
     if (data['ResponseCode'] == 1) {
       Get.back();
@@ -119,9 +118,7 @@ class HomeController extends GetxController {
   }
 
   deleteBookApi({int bookId = 0}) async {
-    FormData formData = FormData.fromMap({
-      if (bookId != 0) 'book_id': bookId,
-    });
+    FormData formData = FormData.fromMap({if (bookId != 0) 'book_id': bookId, 'user_id': await GetStorageData().readString(GetStorageData().userId)});
     var data = await APIFunction().apiCall(apiName: Constants.deleteBook, context: Get.context!, params: formData);
 
     Utils().showToast(message: data['ResponseMsg'], context: Get.context!);
@@ -290,7 +287,9 @@ class HomeController extends GetxController {
 
   getReportFileApi() async {
     printAction('----------------->>>>>>report pdf file');
-    FormData formData = FormData.fromMap({});
+    FormData formData = FormData.fromMap({
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
+    });
     var data = await APIFunction().apiCall(apiName: Constants.getReportPDF, context: Get.context!, params: formData);
 
     if (data['ResponseCode'] == 1) {
@@ -594,8 +593,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
@@ -610,8 +608,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;
@@ -643,6 +640,7 @@ class HomeController extends GetxController {
           } else {
             showConfirmDialog(Get.context!, Strings.deleteBook, Strings.doYouWantDeleteBook, Strings.delete, Strings.cancel, () {
               deleteBookApi(bookId: bookId);
+              Navigator.of(Get.context!).pop(); // dismiss dialog
             });
           }
         },

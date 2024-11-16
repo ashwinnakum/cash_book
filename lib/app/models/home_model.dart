@@ -29,9 +29,9 @@ class HomeModel {
 }
 
 class HomeData {
-  int? netBalance;
-  int? totalIn;
-  int? totalOut;
+  dynamic netBalance;
+  dynamic totalIn;
+  dynamic totalOut;
   List<BookHistories>? bookHistories;
 
   HomeData({this.netBalance, this.totalIn, this.totalOut, this.bookHistories});
@@ -65,7 +65,7 @@ class BookHistories {
   String? name;
   String? updatedAt;
   String? createdAt;
-  int? netBalance;
+  dynamic? netBalance;
 
   BookHistories({this.bookId, this.name, this.updatedAt, this.netBalance});
 
@@ -92,7 +92,7 @@ class BookHistoryData {
   int? bhId;
   int? bookId;
   String? cacheType;
-  int? amount;
+  dynamic amount;
   String? remark;
   String? entryDate;
   String? entryTime;

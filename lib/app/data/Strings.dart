@@ -2,39 +2,53 @@ class Strings {
   static const appName = "CashBook";
   static const welcome = "Welcome!";
   static const pleaseSign = "Please sign in to continue";
+  static const pleaseUp = "Please sign up to continue";
+  static const pleaseEnterNewPasswordToContinue =
+      "Please enter new password to continue";
+  static const pleaseEnterPhoneNumber = "Please enter you phone number";
+  static const pleaseEnterOtp = "Enter the OTP you received to";
   static const email = "Email";
   static const code = "Code";
   static const password = "Password";
-  static const phone = "Phone";
+  static const mobileNumber = "Phone number";
   static const signIn = "Sign In";
-  static const sendCode = "Send code";
+  static const signUp = "Sign Up";
+  static const sendCode = "Send otp";
   static const verify = "Verify";
-  static const forgotPasswordD = "Forgot Password";
+  static const forgotPasswordD = "Forgot Password?";
   static const otp = "OTP";
   static const getStarted = "Get Started";
   static const donTHaveAnAccount = "Don’t have an account? ";
   static const ok = "OK";
   static const success = "Success";
   static const done = "Done";
-  static const newPassword = "New Password";
+  static const setNewPassword = "Set New Password";
 
-  static const forgotPassword = "Forgot Password?";
-  static const noWorries = "No worries, we will help you to reset your password.";
-  static const send = "Send";
+  static const forgotPassword = "Forgot Password";
+  static const noWorries =
+      "No worries, we will help you to reset your password.";
+  static const send = "Send OTP";
+  static const resendOTP = "Resend OTP";
   static const next = "Next";
+
+  static const enterOtp = "Enter OTP";
+  static const newPassword = "New Password";
 
   static const otpAuth = "OTP Authentication";
   static const enterCode = "Enter Code";
-  static const enterTheVerification = "Enter the verification code we just sent to your email address.";
+  static const enterTheVerification =
+      "Enter the verification code we just sent to your email address.";
   static const resetPassword = "Reset Password";
-  static const yourNewPassword = "Your new password must be different from previously used password.";
-  static const confirmPassword = "Confirm Password";
-  static const confirmNewPassword = "Confirm Password";
-  static const pleaseEnterYourCode = "Please enter your code to sent email address";
+  static const yourNewPassword =
+      "Your new password must be different from previously used password.";
+  static const confirmPassword = "Confirm password";
+  static const confirmNewPassword = "Confirm new password";
+  static const pleaseEnterYourCode =
+      "Please enter your code to sent email address";
   static const codeMustBeAtLeast = "Code Must be at least 8 characters.";
   static const String mustBeAtLeast = "Must be at least 6 characters.";
 
-  static const String emailErrorMessage = "Please enter email";
+  static const String phoneErrorMessage = "Please enter phone number";
   static const String passwordErrorMessage = "Please enter password";
 
   static const String noDataFound = "No data found";
@@ -124,6 +138,12 @@ class Strings {
   static const deleteBook = "Delete Book";
   static const doYouWantDeleteBook = "Do you want to delete book?";
 
+  static const doYouWantLogOut = "Do you want to logout?";
+  static const logOut = "Log Out";
+  static const logout = "Logout";
+
   static const deleteEntry = "Delete Entry";
   static const doYouWantDeleteEntry = "Do you want to delete entry?";
+
+  static const alreadyHaveAnAccount = "Already have an account? ";
 }

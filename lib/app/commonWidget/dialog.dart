@@ -8,7 +8,6 @@ showConfirmDialog(
   String cancelBtnTxt,
   Function onConfirmClicked,
 ) {
-  // set up the buttons
   Widget cancelButton = TextButton(
     child: AppText(cancelBtnTxt, color: AppColors.blackColor, fontFamily: FontFamily.medium, fontSize: 16.sp),
     onPressed: () {
@@ -19,7 +18,7 @@ showConfirmDialog(
     child: AppText(confirmBtnTxt, color: AppColors.primary, fontFamily: FontFamily.medium, fontSize: 16.sp),
     onPressed: () {
       onConfirmClicked.call();
-      Navigator.of(context).pop(); // dismiss dialog
+      // Navigator.of(context).pop(); // dismiss dialog
     },
   );
   // set up the AlertDialog
@@ -36,6 +35,7 @@ showConfirmDialog(
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      print('is dial--------');
       return alert;
     },
   );

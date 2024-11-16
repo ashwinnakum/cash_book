@@ -9,6 +9,10 @@ abstract class Routes {
   static const ADD_DETAIL = _Paths.ADD_DETAIL;
   static const GENERATE_REPORT = _Paths.GENERATE_REPORT;
   static const LOGIN = _Paths.LOGIN;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
+  static const OTP = _Paths.OTP;
+  static const NEW_PASSWORD = _Paths.NEW_PASSWORD;
+  static const SIGNUP = _Paths.SIGNUP;
 }
 
 abstract class _Paths {
@@ -19,4 +23,8 @@ abstract class _Paths {
   static const ADD_DETAIL = '/add-detail';
   static const GENERATE_REPORT = '/generate-report';
   static const LOGIN = '/login';
+  static const FORGOT_PASSWORD = '/forgot-password';
+  static const OTP = '/otp';
+  static const NEW_PASSWORD = '/new-password';
+  static const SIGNUP = '/signup';
 }

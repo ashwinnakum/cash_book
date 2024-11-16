@@ -29,10 +29,10 @@ class BookDetailModel {
 }
 
 class Data {
-  int? netBalance;
-  int? totalIn;
-  int? totalOut;
-  int? totalBookHistories;
+  dynamic netBalance;
+  dynamic totalIn;
+  dynamic totalOut;
+  dynamic totalBookHistories;
   List<BookHistories>? bookHistories;
 
   Data({this.netBalance, this.totalIn, this.totalOut, this.totalBookHistories, this.bookHistories});
@@ -67,8 +67,8 @@ class BookHistories {
   int? bhId;
   int? bookId;
   String? cashType;
-  int? amount;
-  int? balance;
+  dynamic amount;
+  dynamic balance;
   String? remark;
   String? entryDate;
   String? entryTime;
@@ -77,18 +77,19 @@ class BookHistories {
   bool? isSelect;
   List<Attaches>? attaches;
 
-  BookHistories({this.bhId,
-    this.bookId,
-    this.cashType,
-    this.amount,
-    this.balance,
-    this.remark,
-    this.entryDate,
-    this.entryTime,
-    this.createdAt,
-    this.updatedAt,
-    this.isSelect = false,
-    this.attaches});
+  BookHistories(
+      {this.bhId,
+      this.bookId,
+      this.cashType,
+      this.amount,
+      this.balance,
+      this.remark,
+      this.entryDate,
+      this.entryTime,
+      this.createdAt,
+      this.updatedAt,
+      this.isSelect = false,
+      this.attaches});
 
   BookHistories.fromJson(Map<String, dynamic> json) {
     bhId = json['bh_id'];

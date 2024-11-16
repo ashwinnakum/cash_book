@@ -4,7 +4,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     Future.delayed(const Duration(seconds: 3)).then((value) {
-      if (GetStorageData().containKey(GetStorageData().loginModel)) {
+      if (GetStorageData().containKey(GetStorageData().userId)) {
         Get.offAllNamed(Routes.HOME);
       } else {
         Get.offAllNamed(Routes.LOGIN);

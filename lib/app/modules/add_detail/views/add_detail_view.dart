@@ -30,7 +30,6 @@ class AddDetailView extends GetView<AddDetailController> {
                         GestureDetector(
                             onTap: () {
                               Utils().hideKeyboard();
-
                               Get.back(result: controller.cnt != 0);
                             },
                             child: const Icon(Icons.arrow_back, color: AppColors.whiteColor)),
@@ -45,10 +44,11 @@ class AddDetailView extends GetView<AddDetailController> {
                         controller.withScreen == Strings.edit
                             ? GestureDetector(
                                 onTap: () {
-                                  showConfirmDialog(Get.context!, Strings.deleteEntry, Strings.doYouWantDeleteEntry, Strings.delete, Strings.cancel,
-                                      () {
+                                  print('is that editter---------');
+
+                                  showConfirmDialog(Get.context!, Strings.deleteEntry, Strings.doYouWantDeleteEntry, Strings.delete, Strings.cancel, () {
                                     controller.deleteCashEntryApi();
-                                  });
+                                  }); // dismiss dialog
                                 },
                                 child: Container(
                                   color: Colors.transparent,
@@ -148,7 +148,10 @@ class AddDetailView extends GetView<AddDetailController> {
                           hintText: Strings.amount,
                           labelText: Strings.amount,
                           focusNode: controller.amountNode,
-                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                          ],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
                           onChanged: (p0) {
                             controller.isAmountAvailable.value = true;
                             controller.update();
@@ -195,8 +198,7 @@ class AddDetailView extends GetView<AddDetailController> {
                                                 color: AppColors.primary,
                                               ),
                                               10.horizontalSpace,
-                                              AppText(Strings.attachImageOrPdf,
-                                                  fontSize: 14.sp, fontFamily: FontFamily.semiBold, color: AppColors.primary)
+                                              AppText(Strings.attachImageOrPdf, fontSize: 14.sp, fontFamily: FontFamily.semiBold, color: AppColors.primary)
                                             ],
                                           ),
                                         ),
@@ -273,8 +275,8 @@ class AddDetailView extends GetView<AddDetailController> {
                                                           ),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              border: Border.all(
-                                                  color: index == controller.fileList.length ? AppColors.primary : AppColors.greyText, width: 0.5.h),
+                                              border:
+                                                  Border.all(color: index == controller.fileList.length ? AppColors.primary : AppColors.greyText, width: 0.5.h),
                                               borderRadius: BorderRadius.all(Radius.circular(5.r)),
                                             ),
                                             margin: EdgeInsets.only(right: 30.w, top: 10.h),
@@ -327,8 +329,7 @@ class AddDetailView extends GetView<AddDetailController> {
                 Container(height: 1.h, color: Colors.grey.withOpacity(0.3), width: double.infinity),
                 20.verticalSpace,
                 Padding(
-                  padding: EdgeInsets.only(
-                      left: FontSize.defaultPadding, right: FontSize.defaultPadding, bottom: MediaQuery.of(context).padding.bottom + 5.h),
+                  padding: EdgeInsets.only(left: FontSize.defaultPadding, right: FontSize.defaultPadding, bottom: MediaQuery.of(context).padding.bottom + 5.h),
                   child: Row(
                     children: [
                       Expanded(

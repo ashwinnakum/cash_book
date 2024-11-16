@@ -4,13 +4,13 @@ import 'package:cash_book/app/data/all.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GenerateReportController extends GetxController {
   var select;
   List<CommonModel> reportList = [
-    CommonModel(name: Strings.allEntriesRepost, type: Strings.listOffAllEntries),
+    CommonModel(
+        name: Strings.allEntriesRepost, type: Strings.listOffAllEntries),
     CommonModel(name: Strings.todayReport, type: Strings.todayInOutBalance),
     CommonModel(name: Strings.lastMonth, type: Strings.lastMonthInOutBalance),
     CommonModel(name: Strings.lastYear, type: Strings.lastYearInOutBalance),
@@ -20,7 +20,6 @@ class GenerateReportController extends GetxController {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
 
-  RxBool isCustom = false.obs;
   RxInt isValue = 0.obs;
   RxBool isPDf = true.obs;
 
@@ -43,7 +42,8 @@ class GenerateReportController extends GetxController {
 
   validation() {
     if (select == null) {
-      Utils().showToast(message: 'Please select report type', context: Get.context!);
+      Utils().showToast(
+          message: 'Please select report type', context: Get.context!);
     } else {
       printAction('select----------------->>>>>>${select}');
       getReportFileApi();
@@ -58,7 +58,8 @@ class GenerateReportController extends GetxController {
         startDate = '';
         endDate = '';
       } else if (select != 4) {
-        endDate = Utils().changeDateFormat(date: DateTime.now(), outputFormat: 'yyyy-MM-dd');
+        endDate = Utils()
+            .changeDateFormat(date: DateTime.now(), outputFormat: 'yyyy-MM-dd');
         startDate = Utils().changeDateFormat(
             date: select == 1
                 ? DateTime.now()
@@ -67,9 +68,12 @@ class GenerateReportController extends GetxController {
                     : Jiffy.now().subtract(years: 1).dateTime,
             outputFormat: 'yyyy-MM-dd');
       } else if (select == 4) {
-        printAction('selectedStartDate----------------->>>>>>${selectedStartDate}');
-        startDate = Utils().changeDateFormat(date: selectedStartDate, outputFormat: 'yyyy-MM-dd');
-        endDate = Utils().changeDateFormat(date: selectedEndDate, outputFormat: 'yyyy-MM-dd');
+        printAction(
+            'selectedStartDate----------------->>>>>>${selectedStartDate}');
+        startDate = Utils().changeDateFormat(
+            date: selectedStartDate, outputFormat: 'yyyy-MM-dd');
+        endDate = Utils().changeDateFormat(
+            date: selectedEndDate, outputFormat: 'yyyy-MM-dd');
       }
     }
 
@@ -77,9 +81,14 @@ class GenerateReportController extends GetxController {
       if (isValue.value != 0) 'book_id': isValue.value,
       if (select != null && startDate.isNotEmpty) 'start_date': startDate,
       if (select != null && endDate.isNotEmpty) 'end_date': endDate,
+      'user_id': await GetStorageData().readString(GetStorageData().userId),
+
+
     });
-    final data =
-        await APIFunction().apiCall(apiName: isPDf.value ? Constants.getReportPDF : Constants.getReportFile, context: Get.context!, params: formData);
+    final data = await APIFunction().apiCall(
+        apiName: isPDf.value ? Constants.getReportPDF : Constants.getReportFile,
+        context: Get.context!,
+        params: formData);
 
     if (data['ResponseCode'] == 1) {
       _launchUrl(data['data']['url']);
@@ -93,25 +102,6 @@ class GenerateReportController extends GetxController {
     if (!await launchUrl(Uri.parse(uri))) {
       throw Exception('Could not launch');
     }
-  }
-
-  Future<bool> checkPermission() async {
-    if (platform == TargetPlatform.android) {
-      final status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        printAction('storage is grated----------------->>>>>>${status}');
-        final result = await Permission.storage.request();
-        printAction('storage is result----------------->>>>>>${result}');
-        if (result == PermissionStatus.granted) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-    return false;
   }
 
   Future<void> prepareSaveDir() async {
@@ -153,7 +143,8 @@ class GenerateReportController extends GetxController {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 15.h, left: 15.h, right: 15.h, bottom: 10.h),
+                    padding: EdgeInsets.only(
+                        top: 15.h, left: 15.h, right: 15.h, bottom: 10.h),
                     child: Row(
                       children: [
                         GestureDetector(
@@ -200,7 +191,9 @@ class GenerateReportController extends GetxController {
                           ),
                           5.horizontalSpace,
                           AppText(
-                            DateFormat('dd/MM/yyyy').format(selectedStartDate).toString(),
+                            DateFormat('dd/MM/yyyy')
+                                .format(selectedStartDate)
+                                .toString(),
                             color: AppColors.primary,
                             fontSize: FontSize.s16,
                             fontFamily: FontFamily.medium,
@@ -234,7 +227,9 @@ class GenerateReportController extends GetxController {
                           ),
                           5.horizontalSpace,
                           AppText(
-                            DateFormat('dd/MM/yyyy').format(selectedEndDate).toString(),
+                            DateFormat('dd/MM/yyyy')
+                                .format(selectedEndDate)
+                                .toString(),
                             color: AppColors.primary,
                             fontSize: FontSize.s16,
                             fontFamily: FontFamily.medium,
@@ -250,7 +245,6 @@ class GenerateReportController extends GetxController {
                     child: CommonButton(
                         padding: EdgeInsets.symmetric(vertical: 17.h),
                         onTap: () {
-                          isCustom.value = true;
                           update();
                           Get.back();
                         },
@@ -267,8 +261,11 @@ class GenerateReportController extends GetxController {
   }
 
   Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime.now());
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedStartDate,
+        firstDate: DateTime(2000, 8),
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedStartDate) {
       print("picked -- $picked");
       selectedStartDate = picked;
@@ -277,8 +274,11 @@ class GenerateReportController extends GetxController {
   }
 
   Future<void> selectEndDate(BuildContext context) async {
-    final DateTime? picked =
-        await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime.now());
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedEndDate,
+        firstDate: selectedStartDate,
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedEndDate) {
       print("picked -- $picked");
       selectedEndDate = picked;

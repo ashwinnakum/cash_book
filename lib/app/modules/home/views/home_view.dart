@@ -1,3 +1,5 @@
+import 'package:cash_book/app/commonWidget/dialog.dart';
+import 'package:cash_book/app/modules/login/controllers/login_controller.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
@@ -31,7 +33,6 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               children: [
                 Container(
-                  color: AppColors.primary,
                   margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                   padding: EdgeInsets.only(left: FontSize.defaultPadding, right: FontSize.defaultPadding, top: 15.h, bottom: 13.h),
                   child: Row(
@@ -63,6 +64,18 @@ class HomeView extends GetView<HomeController> {
                           child: Image.asset(ImagePath.imagesIcRedPdf),
                         ),
                       ),
+                      15.horizontalSpace,
+                      GestureDetector(
+                          onTap: () {
+                            showConfirmDialog(Get.context!, Strings.logOut, Strings.doYouWantLogOut, Strings.logout, Strings.cancel, () async {
+                              Loading.show();
+                              await Future.delayed(Duration(milliseconds: 500));
+                              GetStorageData().removeAllData();
+                              Loading.dismiss();
+                              Get.offAllNamed(Routes.LOGIN);
+                            });
+                          },
+                          child: Icon(size: 30.h, Icons.logout, color: AppColors.whiteColor)),
                     ],
                   ),
                 ),
@@ -71,7 +84,7 @@ class HomeView extends GetView<HomeController> {
                     color: AppColors.whiteColor,
                     child: ListView(
                       controller: controller.scrollController,
-                      physics: const ScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       padding: EdgeInsets.only(bottom: 50.h),
                       children: [
                         Container(
@@ -150,9 +163,7 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                                 const Spacer(),
                                                 AppText(
-                                                  controller.homeData != null
-                                                      ? Utils().currencyFormatChange(amount: controller.homeData?.totalIn)
-                                                      : '00',
+                                                  controller.homeData != null ? Utils().currencyFormatChange(amount: controller.homeData?.totalIn) : '00',
                                                   fontFamily: FontFamily.semiBold,
                                                   fontSize: 15.sp,
                                                   color: AppColors.appGreenColor,
@@ -172,9 +183,7 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                                 const Spacer(),
                                                 AppText(
-                                                  controller.homeData != null
-                                                      ? Utils().currencyFormatChange(amount: controller.homeData?.totalOut)
-                                                      : '00',
+                                                  controller.homeData != null ? Utils().currencyFormatChange(amount: controller.homeData?.totalOut) : '00',
                                                   fontFamily: FontFamily.semiBold,
                                                   fontSize: 15.sp,
                                                   color: AppColors.appRedColor,

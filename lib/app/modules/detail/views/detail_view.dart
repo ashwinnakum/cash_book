@@ -14,8 +14,8 @@ class DetailView extends GetView<DetailController> {
     return GetBuilder<DetailController>(
       builder: (controller) {
         return CommonScreen(
-          backgroundColor: AppColors.whiteColor,
           bottomNavigationBarWidget: Container(
+            color: AppColors.whiteColor,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -189,7 +189,7 @@ class DetailView extends GetView<DetailController> {
                 child: Container(
                   color: AppColors.greBackgroundColor,
                   child: ListView(
-                    physics: const ScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     padding: EdgeInsets.zero,
                     children: [
                       SizedBox(
@@ -517,11 +517,11 @@ class DetailView extends GetView<DetailController> {
                                                 GroupedListView<BookHistories, String>(
                                                   padding: EdgeInsets.only(top: 5.h),
                                                   physics: NeverScrollableScrollPhysics(),
-                                                  reverse: true,
                                                   shrinkWrap: true,
                                                   elements: controller.finalBookHistories,
                                                   groupBy: (bookHistories) => Utils().changeDateFormat(
-                                                      date: DateTime.parse('${bookHistories.entryDate!}' ' ${bookHistories.entryTime}'),
+                                                      date: DateTime.parse('${bookHistories.entryDate!}'
+                                                          ' ${bookHistories.entryTime}'),
                                                       outputFormat: 'yyyy-MM-dd 00:00:00'),
                                                   groupSeparatorBuilder: (String groupByValue) => Padding(
                                                     padding: EdgeInsets.only(left: 20.h, top: 12.h, bottom: 16.h),
@@ -577,8 +577,7 @@ class DetailView extends GetView<DetailController> {
                                                                     children: [
                                                                       AppText(
                                                                         '${Utils().currencyFormatChange(amount: element.amount)}' ?? "N/A",
-                                                                        color:
-                                                                            element.cashType == Strings.outKey ? AppColors.marron : AppColors.green,
+                                                                        color: element.cashType == Strings.outKey ? AppColors.marron : AppColors.green,
                                                                         fontFamily: FontFamily.bold,
                                                                         fontSize: FontSize.s16,
                                                                       ),
@@ -618,7 +617,8 @@ class DetailView extends GetView<DetailController> {
                                                                 5.horizontalSpace,
                                                                 AppText(
                                                                   Utils().changeDateFormat(
-                                                                          date: DateTime.parse('${element.entryDate}' ' ${'${element.entryTime}'}'),
+                                                                          date: DateTime.parse('${element.entryDate}'
+                                                                              ' ${'${element.entryTime}'}'),
                                                                           outputFormat: 'dd MMM yyyy, hh:mm:a') ??
                                                                       "",
                                                                   color: AppColors.greyText,
