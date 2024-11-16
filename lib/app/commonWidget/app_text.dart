@@ -106,6 +106,7 @@ class AppRichText extends StatelessWidget {
   final double? fontSize;
   final Function()? onTap;
   final Function()? onTapFourth;
+
   const AppRichText(
       {super.key,
       this.firstText,
