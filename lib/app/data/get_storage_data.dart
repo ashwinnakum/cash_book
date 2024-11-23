@@ -7,7 +7,7 @@ class GetStorageData {
   String userId = "userId";
   String uid = "uid";
   String token = "token";
-  String profile = "profile";
+  String name = "name";
 
   String email = "email";
   String password = "password";
@@ -55,5 +55,6 @@ class GetStorageData {
   removeAllData() {
     final box = GetStorage();
     box.remove(GetStorageData().userId);
+    box.remove(GetStorageData().name);
   }
 }

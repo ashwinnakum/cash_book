@@ -47,11 +47,14 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       15.horizontalSpace,
-                      AppText(
-                        Strings.account,
-                        color: AppColors.whiteColor,
-                        fontSize: FontSize.s18,
-                        fontFamily: FontFamily.semiBold,
+                      Expanded(
+                        child: AppText(
+                          '${controller.userName}',
+                          color: AppColors.whiteColor,
+                          fontSize: FontSize.s18,
+                          fontFamily: FontFamily.semiBold,
+                          maxLines: 1,
+                        ),
                       ),
                       const Spacer(),
                       GestureDetector(
@@ -133,12 +136,7 @@ class HomeView extends GetView<HomeController> {
                                                     fontSize: 17.sp,
                                                   ),
                                                   const Spacer(),
-                                                  AppText(
-                                                      controller.homeData != null
-                                                          ? Utils().currencyFormatChange(amount: controller.homeData?.netBalance)
-                                                          : '00',
-                                                      fontFamily: FontFamily.semiBold,
-                                                      fontSize: 17.sp),
+                                                  AppText(controller.homeData != null ? Utils().currencyFormatChange(amount: controller.homeData?.netBalance) : '00', fontFamily: FontFamily.semiBold, fontSize: 17.sp),
                                                 ],
                                               ),
                                             ),
@@ -406,8 +404,7 @@ class HomeView extends GetView<HomeController> {
                                         );
                                       },
                                     ),
-                                    if (controller.search.text.trim().isNotEmpty && controller.finalBookHistories.length <= 10)
-                                      (Get.height - 270).verticalSpace,
+                                    if (controller.search.text.trim().isNotEmpty && controller.finalBookHistories.length <= 10) (Get.height - 270).verticalSpace,
                                   ],
                                 )
                               : Padding(

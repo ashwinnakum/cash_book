@@ -76,6 +76,12 @@ class SignupView extends GetView<SignupController> {
                                 ),
                                 30.verticalSpace,
                                 CommonTextField(
+                                  controller: controller.name,
+                                  hintText: Strings.name,
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                20.verticalSpace,
+                                CommonTextField(
                                   controller: controller.phoneNo,
                                   hintText: Strings.mobileNumber,
                                   keyboardType: TextInputType.number,

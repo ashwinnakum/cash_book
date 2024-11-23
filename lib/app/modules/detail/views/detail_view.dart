@@ -20,10 +20,7 @@ class DetailView extends GetView<DetailController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Visibility(
-                  visible: controller.bookDetailModel != null &&
-                      controller.bookDetailModel!.data!.bookHistories!.isEmpty &&
-                      controller.isFinalSelected1.value == -1 &&
-                      controller.isFinalSelected2.value == -1,
+                  visible: controller.bookDetailModel != null && controller.bookDetailModel!.data!.bookHistories!.isEmpty && controller.isFinalSelected1.value == -1 && controller.isFinalSelected2.value == -1,
                   child: Column(
                     children: [
                       20.verticalSpace,
@@ -238,9 +235,7 @@ class DetailView extends GetView<DetailController> {
                                                 ),
                                                 const Spacer(),
                                                 AppText(
-                                                  controller.bookDetailModel != null
-                                                      ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.netBalance)
-                                                      : '00',
+                                                  controller.bookDetailModel != null ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.netBalance) : '00',
                                                   fontFamily: FontFamily.semiBold,
                                                   fontSize: 17.sp,
                                                 ),
@@ -268,9 +263,7 @@ class DetailView extends GetView<DetailController> {
                                               ),
                                               const Spacer(),
                                               AppText(
-                                                controller.bookDetailModel != null
-                                                    ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalIn)
-                                                    : '00',
+                                                controller.bookDetailModel != null ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalIn) : '00',
                                                 fontFamily: FontFamily.semiBold,
                                                 fontSize: 15.sp,
                                                 color: AppColors.appGreenColor,
@@ -290,9 +283,7 @@ class DetailView extends GetView<DetailController> {
                                               ),
                                               const Spacer(),
                                               AppText(
-                                                controller.bookDetailModel != null
-                                                    ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalOut)
-                                                    : '00',
+                                                controller.bookDetailModel != null ? Utils().currencyFormatChange(amount: controller.bookDetailModel?.data?.totalOut) : '00',
                                                 fontFamily: FontFamily.semiBold,
                                                 fontSize: 15.sp,
                                                 color: AppColors.appRedColor,
@@ -381,6 +372,10 @@ class DetailView extends GetView<DetailController> {
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         controller.search.text = '';
+
+                                                        controller.bookDetailModel?.data?.netBalance = controller.netBalance;
+                                                        controller.bookDetailModel?.data?.totalIn = controller.totalInBalance;
+                                                        controller.bookDetailModel?.data?.totalOut = controller.totalOutBalance;
                                                         controller.finalBookHistories = controller.bookHistories;
                                                         controller.update();
                                                       },
@@ -518,6 +513,8 @@ class DetailView extends GetView<DetailController> {
                                                   padding: EdgeInsets.only(top: 5.h),
                                                   physics: NeverScrollableScrollPhysics(),
                                                   shrinkWrap: true,
+                                                  sort: true,
+                                                  reverse: true,
                                                   elements: controller.finalBookHistories,
                                                   groupBy: (bookHistories) => Utils().changeDateFormat(
                                                       date: DateTime.parse('${bookHistories.entryDate!}'
@@ -535,12 +532,7 @@ class DetailView extends GetView<DetailController> {
                                                   itemBuilder: (context, element) {
                                                     return GestureDetector(
                                                       onTap: () {
-                                                        Get.toNamed(Routes.ADD_DETAIL, arguments: {
-                                                          Strings.withScreen: Strings.edit,
-                                                          Strings.isPlus: element.cashType,
-                                                          'bookingModel': element
-                                                        })!
-                                                            .then((value) {
+                                                        Get.toNamed(Routes.ADD_DETAIL, arguments: {Strings.withScreen: Strings.edit, Strings.isPlus: element.cashType, 'bookingModel': element})!.then((value) {
                                                           Utils().appStatusBar();
                                                           controller.update();
                                                           if (value is bool && value) {
@@ -634,8 +626,7 @@ class DetailView extends GetView<DetailController> {
                                                     );
                                                   },
                                                 ),
-                                                if (controller.search.text.trim().isNotEmpty && controller.finalBookHistories.length <= 10)
-                                                  (Get.height - 270).verticalSpace,
+                                                if (controller.search.text.trim().isNotEmpty && controller.finalBookHistories.length <= 10) (Get.height - 270).verticalSpace,
                                               ],
                                             ),
                                     ],
@@ -643,9 +634,7 @@ class DetailView extends GetView<DetailController> {
                                 )
                               ],
                             )
-                          : controller.bookDetailModel != null &&
-                                  controller.bookDetailModel!.data!.bookHistories!.isEmpty &&
-                                  (controller.isFinalSelected1.value != -1 || controller.isFinalSelected2.value != -1)
+                          : controller.bookDetailModel != null && controller.bookDetailModel!.data!.bookHistories!.isEmpty && (controller.isFinalSelected1.value != -1 || controller.isFinalSelected2.value != -1)
                               ? Padding(
                                   padding: EdgeInsets.only(top: 150.h),
                                   child: Column(

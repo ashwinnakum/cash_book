@@ -3,12 +3,16 @@ import '../../../data/all.dart';
 class SignupController extends GetxController {
   TextEditingController phoneNo = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController name = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
 
   validation() {
-    if (Utils().isValidationEmpty(phoneNo.text.trim())) {
+    print('-opoopopo------------>>>>>${Utils().isValidationEmpty(name.text.trim())}');
+    if (Utils().isValidationEmpty(name.text.trim())) {
+      Utils().showToast(message: 'Please enter name', context: Get.context!);
+    } else if (Utils().isValidationEmpty(phoneNo.text.trim())) {
       Utils().showToast(message: 'Please enter phone number', context: Get.context!);
-    } else if (!Utils().phoneValidator(phoneNo.text.trim()) || phoneNo.text.trim().length != 10) {
+    } else if (!Utils().phoneValidator(phoneNo.text.trim())) {
       Utils().showToast(message: 'Please enter valid phone number', context: Get.context!);
     } else if (Utils().isValidationEmpty(password.text.trim())) {
       Utils().showToast(message: 'Please enter password', context: Get.context!);
@@ -24,6 +28,7 @@ class SignupController extends GetxController {
   signUpApi() async {
     FormData formData = FormData.fromMap({
       'phone_number': phoneNo.text.trim(),
+      'name': name.text.trim(),
       'password': Utils().generateMd5(password.text.trim()),
     });
     var data = await APIFunction().apiCall(apiName: Constants.signUp, context: Get.context!, params: formData);

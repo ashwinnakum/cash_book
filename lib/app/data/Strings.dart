@@ -11,6 +11,7 @@ class Strings {
   static const code = "Code";
   static const password = "Password";
   static const mobileNumber = "Phone number";
+  static const name = "Name";
   static const signIn = "Sign In";
   static const signUp = "Sign Up";
   static const sendCode = "Send otp";

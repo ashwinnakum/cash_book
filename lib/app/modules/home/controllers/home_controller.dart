@@ -39,9 +39,14 @@ class HomeController extends GetxController {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   RxBool isCustom = false.obs;
+  String userName = 'Account';
 
   @override
   void onInit() {
+    if (GetStorageData().containKey(GetStorageData().name)) {
+      userName = GetStorageData().readString(GetStorageData().name) ?? 'Account';
+    }
+
     homeApi();
     scrollController.addListener(() {
       if (scrollOffSet.value <= scrollController.offset) {
@@ -73,11 +78,7 @@ class HomeController extends GetxController {
       }
     }
     FormData formData = FormData.fromMap(
-      ({
-        if (finalSelected.value != -1 && startDate.isNotEmpty) 'start_date': startDate,
-        if (finalSelected.value != -1 && endDate.isNotEmpty) 'end_date': endDate,
-        'user_id': await GetStorageData().readString(GetStorageData().userId)
-      }),
+      ({if (finalSelected.value != -1 && startDate.isNotEmpty) 'start_date': startDate, if (finalSelected.value != -1 && endDate.isNotEmpty) 'end_date': endDate, 'user_id': await GetStorageData().readString(GetStorageData().userId)}),
     );
     var data = await APIFunction().apiCall(apiName: Constants.home, context: Get.context!, params: formData, isLoading: isLoading);
 
@@ -97,8 +98,7 @@ class HomeController extends GetxController {
   }
 
   addUpdateBookApi({int bookId = 0}) async {
-    FormData formData = FormData.fromMap(
-        {'name': addBookNameController.text.trim(), if (bookId != 0) 'book_id': bookId, 'user_id': await GetStorageData().readString(GetStorageData().userId)});
+    FormData formData = FormData.fromMap({'name': addBookNameController.text.trim(), if (bookId != 0) 'book_id': bookId, 'user_id': await GetStorageData().readString(GetStorageData().userId)});
     var data = await APIFunction().apiCall(apiName: Constants.addUpdateBook, context: Get.context!, params: formData);
     if (data['ResponseCode'] == 1) {
       Get.back();
@@ -235,10 +235,7 @@ class HomeController extends GetxController {
                                       child: Container(
                                         padding: EdgeInsets.all(9.h),
                                         margin: EdgeInsets.only(right: 8.w, bottom: 8.h),
-                                        decoration: BoxDecoration(
-                                            color: AppColors.primary.withOpacity(0.035),
-                                            border: Border.all(color: AppColors.primary, width: 1.3),
-                                            borderRadius: BorderRadius.all(Radius.circular(30.r))),
+                                        decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.035), border: Border.all(color: AppColors.primary, width: 1.3), borderRadius: BorderRadius.all(Radius.circular(30.r))),
                                         child: AppText(suggestionList[index].name!, color: AppColors.primary, fontSize: 13.sp),
                                       ),
                                     );

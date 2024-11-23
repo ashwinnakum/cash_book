@@ -59,12 +59,13 @@ dependencies:
   cached_network_image: ^3.3.1
   shimmer:
   jiffy: ^6.2.2
-  url_launcher: ^6.2.5
+  url_launcher:
   #  flutter_cache_manager: ^3.3.1
   path_provider: ^2.0.2
   permission_handler: ^8.0.0+2
   flutter_pdfview: ^1.3.2
   pinput:
+  url_launcher_ios: ^6.3.1
 
 
 

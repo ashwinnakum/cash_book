@@ -12,6 +12,10 @@ class DetailController extends GetxController {
   RxInt isSelected2 = (-1).obs;
   RxInt isFinalSelected2 = (-1).obs;
 
+  dynamic netBalance;
+  dynamic totalInBalance;
+  dynamic totalOutBalance;
+
   RxBool isCustom = false.obs;
   int bookId = 0;
   String name = '';
@@ -52,7 +56,6 @@ class DetailController extends GetxController {
       bookId = Get.arguments['bookId'];
       name = Get.arguments['name'];
     }
-    printAction('book id is ----------------->>>>>>${bookId}');
     if (bookId != 0) {
       getBookDetails();
     }
@@ -62,6 +65,8 @@ class DetailController extends GetxController {
   getBookDetails({bool isClearFilter = false}) async {
     String startDate = '';
     String endDate = '';
+    bookHistories.clear();
+    finalBookHistories.clear();
     if (isFinalSelected1.value != -1) {
       if (isFinalSelected1.value != 3) {
         endDate = Utils().changeDateFormat(date: DateTime.now(), outputFormat: 'yyyy-MM-dd');
@@ -94,8 +99,18 @@ class DetailController extends GetxController {
     BookDetailModel model = BookDetailModel.fromJson(data);
     if (model.responseCode == 1) {
       bookDetailModel = model;
-      bookHistories = model.data!.bookHistories!;
-      finalBookHistories = model.data!.bookHistories!;
+      bookHistories.addAll(model.data!.bookHistories!);
+      bookHistories.sort((a, b) {
+        DateTime dateTimeA = DateTime.parse('${a.entryDate} ${a.entryTime}');
+        DateTime dateTimeB = DateTime.parse('${b.entryDate} ${b.entryTime}');
+        return dateTimeA.compareTo(dateTimeB);
+      });
+      finalBookHistories = bookHistories;
+
+      netBalance = model.data!.netBalance;
+      totalInBalance = model.data!.totalIn;
+      totalOutBalance = model.data!.totalOut;
+
       if (isClearFilter) {
         isFinalSelected1.value = -1;
         isSelected1.value = -1;
@@ -131,11 +146,24 @@ class DetailController extends GetxController {
 
   searchField(String value) {
     finalBookHistories = [];
-    bookHistories.forEach((element) {
-      if (element.remark!.toLowerCase().contains(value)) {
-        finalBookHistories.add(element);
-      }
-    });
+    bookDetailModel?.data?.netBalance = 0;
+    bookDetailModel?.data?.totalIn = 0;
+    bookDetailModel?.data?.totalOut = 0;
+    if (value.trim().isNotEmpty) {
+      bookHistories.forEach((element) {
+        if (element.remark!.toLowerCase().contains(value)) {
+          bookDetailModel?.data?.totalIn = bookDetailModel?.data?.totalIn + (element.cashType != 'out' ? element.amount : 0);
+          bookDetailModel?.data?.totalOut = bookDetailModel?.data?.totalOut + (element.cashType == 'out' ? element.amount : 0);
+          bookDetailModel?.data?.netBalance = bookDetailModel?.data?.totalIn + bookDetailModel?.data?.totalOut;
+          finalBookHistories.add(element);
+        }
+      });
+    } else {
+      bookDetailModel?.data?.netBalance = netBalance;
+      bookDetailModel?.data?.totalIn = totalInBalance;
+      bookDetailModel?.data?.totalOut = totalOutBalance;
+      finalBookHistories = bookHistories;
+    }
     update();
   }
 
@@ -577,13 +605,10 @@ class DetailController extends GetxController {
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(context: context, initialDate: selectedStartDate, firstDate: DateTime(2000, 8), lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedStartDate) {
-      print("picked -- $picked");
       selectedStartDate = picked;
-      printAction('is this----------------->>>>>>${selectedStartDate.difference(selectedEndDate).inMinutes}');
       if (selectedStartDate.difference(selectedEndDate).inMinutes >= 0) {
         selectedEndDate = selectedStartDate;
         update();
-        printAction('selectEndDate----------------->>>>>>${selectedEndDate}');
       }
       update();
     }
@@ -592,7 +617,6 @@ class DetailController extends GetxController {
   Future<void> selectEndDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(context: context, initialDate: selectedEndDate, firstDate: selectedStartDate, lastDate: DateTime(2030, 8));
     if (picked != null && picked != selectedEndDate) {
-      print("picked -- $picked");
       selectedEndDate = picked;
       update();
     }
