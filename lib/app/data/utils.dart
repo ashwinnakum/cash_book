@@ -170,7 +170,7 @@ class Utils {
       gravity: ToastGravity.BOTTOM,
       toastLength: Toast.LENGTH_SHORT,
       textColor: Colors.white,
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.black.withOpacity(.8),
     );
   }
 
@@ -266,8 +266,7 @@ class Utils {
     String month = DateFormat.M().format(DateTime.now().toUtc());
     String day = DateFormat.d().format(DateTime.now().toUtc());
     String time = DateFormat.Hm().format(DateTime.now().toUtc());
-    String timeDate =
-        '${DateFormat.y().format(DateTime.now().toUtc())}-${month.length == 1 ? '0$month' : month}-${day.length == 1 ? '0$day' : day} $time';
+    String timeDate = '${DateFormat.y().format(DateTime.now().toUtc())}-${month.length == 1 ? '0$month' : month}-${day.length == 1 ? '0$day' : day} $time';
     return timeDate;
   }
 
@@ -432,10 +431,7 @@ class Utils {
     var diff = date.difference(now);
     var time = '';
 
-    if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 0) {
+    if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
       time = format.format(date);
     } else {
       if (diff.inDays == 1) {

@@ -7,7 +7,6 @@ class SignupController extends GetxController {
   TextEditingController confirmPassword = TextEditingController();
 
   validation() {
-    print('-opoopopo------------>>>>>${Utils().isValidationEmpty(name.text.trim())}');
     if (Utils().isValidationEmpty(name.text.trim())) {
       Utils().showToast(message: 'Please enter name', context: Get.context!);
     } else if (Utils().isValidationEmpty(phoneNo.text.trim())) {

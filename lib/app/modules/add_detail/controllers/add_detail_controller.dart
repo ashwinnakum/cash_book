@@ -86,7 +86,7 @@ class AddDetailController extends GetxController {
       'cash_type': isPlus,
       'amount': amountController.text.trim(),
       'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
-      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
+      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:${DateTime.now().second}',
       'remark': remark.text.trim(),
       'user_id': await GetStorageData().readString(GetStorageData().userId),
     });
@@ -121,7 +121,7 @@ class AddDetailController extends GetxController {
       'cash_type': isPlus,
       'amount': amountController.text.trim(),
       'entry_date': Utils().changeDateFormat(date: datePicker, outputFormat: 'yyyy-MM-dd'),
-      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:00',
+      'entry_time': '${timerPicker.hour}:${timerPicker.minute}:${DateTime.now().second}',
       'remark': remark.text.trim(),
       if (removeList.isNotEmpty) 'remove_media_ids': removeList.join(','),
       'user_id': await GetStorageData().readString(GetStorageData().userId),
